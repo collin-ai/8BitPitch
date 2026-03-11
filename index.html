@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BitPitch — Shark Tank Mental Math Trainer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===================== HOME SCREEN ===================== -->
+  <div id="screen-home" class="screen">
+    <header class="header">
+      <h1 class="title">BIT<span class="title-accent">PITCH</span></h1>
+      <p class="subtitle">Shark Tank Mental Math Trainer</p>
+    </header>
+
+    <div class="mode-toggle-bar">
+      <span class="mode-label" id="mode-label">DRILL MODE</span>
+      <button class="toggle-btn" id="mode-toggle-btn" onclick="AppState.toggleMode()">
+        SWITCH TO PRACTICE
+      </button>
+    </div>
+
+    <div class="exercise-grid" id="exercise-grid">
+      <!-- Populated by app.js -->
+    </div>
+
+    <div class="home-footer">
+      <p>SELECT AN EXERCISE TO BEGIN</p>
+    </div>
+  </div>
+
+  <!-- ===================== DRILL SCREEN ===================== -->
+  <div id="screen-drill" class="screen hidden">
+    <div class="drill-header">
+      <button class="back-btn" onclick="AppState.goHome()">&#9664; BACK</button>
+      <span class="drill-title" id="drill-title">EXERCISE</span>
+      <span class="drill-timer" id="drill-timer"></span>
+    </div>
+
+    <div class="drill-body">
+      <div id="drill-area">
+        <!-- Exercise content rendered here by exercise modules -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SUMMARY SCREEN ===================== -->
+  <div id="screen-summary" class="screen hidden">
+    <div class="summary-header">
+      <h2 class="summary-title">SESSION COMPLETE!</h2>
+    </div>
+
+    <div class="summary-stats" id="summary-stats">
+      <!-- Populated by app.js showSummary() -->
+    </div>
+
+    <div class="summary-actions">
+      <button class="btn btn-primary" onclick="AppState.goHome()">HOME</button>
+      <button class="btn btn-secondary" id="play-again-btn" onclick="AppState.playAgain()">PLAY AGAIN</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCRIPTS ===================== -->
+  <!-- Load order matters: utils first, then exercises, then app last -->
+  <script src="utils/random.js"></script>
+  <script src="utils/timer.js"></script>
+  <script src="utils/scoring.js"></script>
+  <script src="exercises/ex01-percentage-snap.js"></script>
+  <script src="exercises/ex02-multiples.js"></script>
+  <script src="exercises/ex03-double-triple-halve.js"></script>
+  <script src="exercises/ex04-triangle-drill.js"></script>
+  <script src="exercises/ex05-growth-rate.js"></script>
+  <script src="exercises/ex06-break-even.js"></script>
+  <script src="exercises/ex07-tam-estimation.js"></script>
+  <script src="exercises/ex08-valuation-challenge.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>

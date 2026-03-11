@@ -1,0 +1,476 @@
+/* ============================================================
+   BitPitch — 8-bit Theme
+   All measurements in px for pixel-perfect retro look.
+   No border-radius anywhere — square corners only.
+   ============================================================ */
+
+/* ---------- Google Font import (requires internet) ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* ---------- Color palette ---------- */
+:root {
+  --bg:        #0a0a0a;
+  --panel:     #111827;
+  --border:    #1e3a5f;
+  --green:     #39ff14;
+  --blue:      #00d4ff;
+  --yellow:    #ffe600;
+  --red:       #ff2d55;
+  --purple:    #bf5fff;
+  --text:      #e8e8e8;
+  --text-dim:  #666;
+  --shadow:    4px 4px 0px #000;
+}
+
+/* ---------- Reset & base ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+/* ---------- Screens ---------- */
+.screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+  gap: 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ---------- HOME: Header ---------- */
+.header {
+  text-align: center;
+  padding: 16px 0 8px;
+}
+
+.title {
+  font-size: 32px;
+  color: var(--yellow);
+  text-shadow: 4px 4px 0 #7a6000, 8px 8px 0 #000;
+  letter-spacing: 4px;
+}
+
+.title-accent {
+  color: var(--green);
+}
+
+.subtitle {
+  font-size: 8px;
+  color: var(--blue);
+  margin-top: 12px;
+  letter-spacing: 2px;
+}
+
+/* ---------- HOME: Mode toggle bar ---------- */
+.mode-toggle-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--panel);
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 10px 20px;
+  width: 100%;
+  max-width: 640px;
+  justify-content: space-between;
+}
+
+.mode-label {
+  font-size: 9px;
+  color: var(--yellow);
+}
+
+.toggle-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  background: var(--border);
+  color: var(--text);
+  border: 2px solid var(--blue);
+  box-shadow: 3px 3px 0 #000;
+  padding: 8px 12px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.1s;
+}
+
+.toggle-btn:hover {
+  background: var(--blue);
+  color: #000;
+}
+
+.toggle-btn:active {
+  box-shadow: 1px 1px 0 #000;
+  transform: translate(2px, 2px);
+}
+
+/* ---------- HOME: Exercise grid ---------- */
+.exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 640px;
+}
+
+.exercise-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  background: var(--panel);
+  color: var(--text);
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 16px 10px;
+  cursor: pointer;
+  text-align: left;
+  line-height: 2;
+  letter-spacing: 0.5px;
+  transition: border-color 0.1s;
+}
+
+.exercise-btn:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.exercise-btn:active {
+  box-shadow: 2px 2px 0 #000;
+  transform: translate(2px, 2px);
+}
+
+.exercise-btn .ex-num {
+  color: var(--yellow);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.home-footer {
+  font-size: 8px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  animation: blink 1.2s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ---------- DRILL: Header ---------- */
+.drill-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 640px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+}
+
+.back-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  background: transparent;
+  color: var(--text-dim);
+  border: 2px solid var(--text-dim);
+  padding: 6px 10px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 #000;
+}
+
+.back-btn:hover { color: var(--red); border-color: var(--red); }
+
+.drill-title {
+  font-size: 9px;
+  color: var(--blue);
+  letter-spacing: 1px;
+}
+
+.drill-timer {
+  font-size: 11px;
+  color: var(--yellow);
+  min-width: 60px;
+  text-align: right;
+}
+
+.drill-timer.warning { color: var(--red); animation: blink 0.5s step-end infinite; }
+
+/* ---------- DRILL: Body ---------- */
+.drill-body {
+  width: 100%;
+  max-width: 640px;
+  flex: 1;
+}
+
+#drill-area {
+  width: 100%;
+}
+
+/* ---------- Drill cards (used by exercise modules) ---------- */
+.drill-card {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 24px 20px;
+  margin-bottom: 16px;
+}
+
+.drill-question {
+  font-size: 11px;
+  color: var(--text);
+  margin-bottom: 20px;
+  line-height: 2.2;
+}
+
+.drill-question .highlight {
+  color: var(--yellow);
+}
+
+.drill-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.drill-input-label {
+  font-size: 8px;
+  color: var(--blue);
+  min-width: 80px;
+}
+
+.drill-input {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  background: #000;
+  color: var(--green);
+  border: 2px solid var(--border);
+  box-shadow: inset 2px 2px 0 #000;
+  padding: 8px 12px;
+  width: 200px;
+  outline: none;
+}
+
+.drill-input:focus {
+  border-color: var(--green);
+}
+
+.drill-input::placeholder {
+  color: var(--text-dim);
+  font-size: 8px;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  border: 2px solid;
+  box-shadow: var(--shadow);
+  padding: 12px 20px;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.btn:active {
+  box-shadow: 2px 2px 0 #000;
+  transform: translate(2px, 2px);
+}
+
+.btn-primary {
+  background: var(--green);
+  color: #000;
+  border-color: #1a7a00;
+}
+
+.btn-primary:hover { background: #60ff40; }
+
+.btn-secondary {
+  background: var(--panel);
+  color: var(--blue);
+  border-color: var(--blue);
+}
+
+.btn-secondary:hover { background: var(--blue); color: #000; }
+
+.btn-danger {
+  background: var(--panel);
+  color: var(--red);
+  border-color: var(--red);
+}
+
+.btn-danger:hover { background: var(--red); color: #000; }
+
+.btn-self-grade {
+  font-size: 20px;
+  padding: 10px 20px;
+  background: var(--panel);
+  border-color: var(--border);
+}
+
+.btn-self-grade:hover { border-color: var(--yellow); }
+
+/* ---------- Feedback overlays ---------- */
+.feedback-box {
+  padding: 16px;
+  margin-top: 12px;
+  font-size: 10px;
+  text-align: center;
+  border: 2px solid;
+  box-shadow: var(--shadow);
+}
+
+.feedback-correct {
+  background: #001a00;
+  border-color: var(--green);
+  color: var(--green);
+  animation: flash-correct 0.4s ease;
+}
+
+.feedback-wrong {
+  background: #1a0005;
+  border-color: var(--red);
+  color: var(--red);
+  animation: flash-wrong 0.4s ease;
+}
+
+.feedback-neutral {
+  background: var(--panel);
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+@keyframes flash-correct {
+  0%   { background: var(--green); color: #000; }
+  100% { background: #001a00; color: var(--green); }
+}
+
+@keyframes flash-wrong {
+  0%   { background: var(--red); color: #000; }
+  100% { background: #1a0005; color: var(--red); }
+}
+
+/* ---------- Progress indicators ---------- */
+.drill-progress {
+  font-size: 8px;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+
+.drill-progress .current { color: var(--yellow); }
+
+.time-goal {
+  font-size: 8px;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+
+.time-goal .goal-num { color: var(--blue); }
+
+/* ---------- Countdown (ex08) ---------- */
+.countdown-bar {
+  width: 100%;
+  height: 12px;
+  background: #000;
+  border: 2px solid var(--border);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.countdown-fill {
+  height: 100%;
+  background: var(--green);
+  transition: width 1s linear, background 0.5s;
+}
+
+.countdown-fill.low { background: var(--red); }
+
+/* ---------- SUMMARY screen ---------- */
+.summary-header {
+  text-align: center;
+  padding: 16px 0;
+}
+
+.summary-title {
+  font-size: 18px;
+  color: var(--yellow);
+  text-shadow: 3px 3px 0 #7a6000;
+}
+
+.summary-stats {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+
+.stat-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+.stat-label {
+  font-size: 8px;
+  color: var(--text-dim);
+}
+
+.stat-value {
+  font-size: 11px;
+  color: var(--green);
+}
+
+.stat-value.accent { color: var(--yellow); }
+
+.summary-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ---------- Utility classes ---------- */
+.text-green  { color: var(--green); }
+.text-yellow { color: var(--yellow); }
+.text-red    { color: var(--red); }
+.text-blue   { color: var(--blue); }
+.text-dim    { color: var(--text-dim); }
+
+.mt-8  { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+
+.flex-row { display: flex; flex-direction: row; gap: 12px; align-items: center; }
+.flex-col { display: flex; flex-direction: column; gap: 12px; }
+.flex-center { justify-content: center; align-items: center; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .exercise-grid { grid-template-columns: 1fr; }
+  .title { font-size: 22px; }
+  .drill-input { width: 160px; }
+}
