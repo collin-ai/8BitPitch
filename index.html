@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BitPitch — Shark Tank Mental Math Trainer</title>
+  <title>8BitPitch Lite — Valuation Mental Math Trainer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
@@ -14,15 +14,15 @@
   <!-- ===================== HOME SCREEN ===================== -->
   <div id="screen-home" class="screen">
     <header class="header">
-      <h1 class="title">BIT<span class="title-accent">PITCH</span></h1>
-      <p class="subtitle">Shark Tank Mental Math Trainer</p>
+      <h1 class="title">8BIT<span class="title-accent">PITCH</span> LITE</h1>
+      <p class="subtitle">Valuation Mental Math Trainer</p>
     </header>
 
-    <div class="mode-toggle-bar">
-      <span class="mode-label" id="mode-label">DRILL MODE</span>
-      <button class="toggle-btn" id="mode-toggle-btn" onclick="AppState.toggleMode()">
-        SWITCH TO PRACTICE
-      </button>
+    <div class="mode-bar" id="mode-bar">
+      <button class="mode-tab active" id="tab-drill"     onclick="AppState.setMode('drill')">DRILL<br>MODE</button>
+      <button class="mode-tab"        id="tab-practice"  onclick="AppState.setMode('practice')">PRACTICE<br>MODE</button>
+      <button class="mode-tab"        id="tab-scores"    onclick="AppState.setMode('scores')">HIGH<br>SCORES</button>
+      <button class="mode-tab"        id="tab-settings"  onclick="AppState.setMode('settings')">DIFFICULTY<br>EXPLAINED</button>
     </div>
 
     <div class="exercise-grid" id="exercise-grid">
@@ -37,8 +37,10 @@
   <!-- ===================== DRILL SCREEN ===================== -->
   <div id="screen-drill" class="screen hidden">
     <div class="drill-header">
-      <button class="back-btn" onclick="AppState.goHome()">&#9664; BACK</button>
+      <button class="back-btn" onclick="AppState.goHome()">MENU</button>
+      <button class="restart-btn" onclick="AppState.restartDrill()">RESTART</button>
       <span class="drill-title" id="drill-title">EXERCISE</span>
+      <span id="drill-difficulty"></span>
       <span class="drill-timer" id="drill-timer"></span>
     </div>
 
@@ -60,8 +62,70 @@
     </div>
 
     <div class="summary-actions">
-      <button class="btn btn-primary" onclick="AppState.goHome()">HOME</button>
+      <button class="btn btn-primary" onclick="AppState.goHome()">MENU</button>
       <button class="btn btn-secondary" id="play-again-btn" onclick="AppState.playAgain()">PLAY AGAIN</button>
+    </div>
+  </div>
+
+  <!-- ===================== DIFFICULTY EXPLAINED SCREEN ===================== -->
+  <div id="screen-difficulty" class="screen hidden">
+    <div class="diff-exp-header">
+      <button class="back-btn" onclick="AppState.setMode('drill')">MENU</button>
+      <span class="diff-exp-title">DIFFICULTY EXPLAINED</span>
+    </div>
+
+    <div class="diff-exp-body">
+      <p class="diff-exp-intro">
+        EACH DRILL HAS THREE DIFFICULTY LEVELS.<br>
+        HIGHER DIFFICULTY = TIGHTER TOLERANCE.
+      </p>
+
+      <div class="diff-exp-section-label">EXAMPLE: DIVIDE BY 3 (33%)</div>
+
+      <div class="diff-exp-table-wrap">
+        <table class="diff-exp-table">
+          <thead>
+            <tr>
+              <th>VALUE</th>
+              <th class="col-easy">EASY<br><span class="col-tol">±25%</span></th>
+              <th class="col-med">MEDIUM<br><span class="col-tol">±5%</span></th>
+              <th class="col-hard">HARD<br><span class="col-tol">2dp</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="col-val">4,000<br><span class="col-exact">= 1,333.33</span></td>
+              <td class="col-easy">~1,000<br>acceptable</td>
+              <td class="col-med">~1,300<br>acceptable</td>
+              <td class="col-hard">1,333.33<br>required</td>
+            </tr>
+            <tr>
+              <td class="col-val">800<br><span class="col-exact">= 266.67</span></td>
+              <td class="col-easy">~200<br>acceptable</td>
+              <td class="col-med">~255–280<br>acceptable</td>
+              <td class="col-hard">266.67<br>required</td>
+            </tr>
+            <tr>
+              <td class="col-val">25,000<br><span class="col-exact">= 8,333.33</span></td>
+              <td class="col-easy">~6,250<br>acceptable</td>
+              <td class="col-med">~8,000<br>acceptable</td>
+              <td class="col-hard">8,333.33<br>required</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="diff-exp-section-label">2 DECIMAL PLACE RULE ON HARD</div>
+
+      <p class="diff-exp-note">
+        ON HARD, DIVIDE-BY-3 ANSWERS REQUIRE THE FULL DECIMAL — TYPE THE COMPLETE NUMBER (E.G. "3333333.33"). SHORTCUTS LIKE "$3.33M" PARSE TO $3,330,000 AND WON'T MATCH THE 2DP REQUIREMENT.
+      </p>
+
+      <div class="diff-exp-section-label">SETTING YOUR DIFFICULTY</div>
+
+      <p class="diff-exp-note">
+        SET YOUR DIFFICULTY ON THE "ARE YOU READY?" SCREEN BEFORE EACH DRILL.
+      </p>
     </div>
   </div>
 
@@ -78,6 +142,17 @@
   <script src="exercises/ex06-break-even.js"></script>
   <script src="exercises/ex07-tam-estimation.js"></script>
   <script src="exercises/ex08-valuation-challenge.js"></script>
+  <!-- ===================== RESTART MODAL ===================== -->
+  <div id="modal-overlay" class="hidden">
+    <div class="modal-box">
+      <div class="modal-msg">RESTART DRILL?</div>
+      <div class="modal-btns">
+        <button class="btn btn-primary" id="modal-confirm-btn">CONFIRM</button>
+        <button class="btn btn-secondary" id="modal-cancel-btn">CANCEL</button>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 
 </body>

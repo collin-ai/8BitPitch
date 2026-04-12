@@ -9,22 +9,31 @@
 
 // Global application state — one object that holds everything
 var AppState = {
-  mode:            'drill',    // 'drill' or 'practice'
+  mode:            'drill',    // 'drill', 'practice', 'scores', 'settings'
   currentExercise: null,       // id string like 'ex01'
   session:         null,       // BitPitch.Session instance
-  lastExercise:    null        // for "Play Again"
+  lastExercise:    null,       // for "Play Again"
+  difficulty:      'EASY',     // 'EASY', 'MEDIUM', 'HARD'
+  drillStarted:    false       // true once player clicks BEGIN past the ready screen
+};
+
+// Difficulty tolerance config — tolerances (%) per operation type per difficulty
+var DIFFICULTY_CONFIG = {
+  EASY:   { pct33: 25, quarter: 5,  growth: 5  },
+  MEDIUM: { pct33: 5,  quarter: 2,  growth: 5  },
+  HARD:   { pct33: 0,  quarter: 0,  growth: 0  }
 };
 
 // Exercise definitions — what shows on the home screen buttons
 var EXERCISES = [
-  { id: 'ex01', num: '01', name: 'PERCENTAGE\nSNAP DRILLS',   color: '#39ff14' },
-  { id: 'ex02', num: '02', name: 'RULE OF THUMB\nMULTIPLES',  color: '#00d4ff' },
-  { id: 'ex03', num: '03', name: 'DOUBLE TRIPLE\nHALVE',      color: '#ffe600' },
-  { id: 'ex04', num: '04', name: 'SHARK TANK\nTRIANGLE',      color: '#bf5fff' },
-  { id: 'ex05', num: '05', name: 'GROWTH RATE\nSNAP',         color: '#39ff14' },
-  { id: 'ex06', num: '06', name: 'BREAK-EVEN\nREASONING',     color: '#00d4ff' },
-  { id: 'ex07', num: '07', name: 'TAM\nESTIMATION',           color: '#ffe600' },
-  { id: 'ex08', num: '08', name: '30-SEC\nCHALLENGE',        color: '#ff2d55' }
+  { id: 'ex01', num: '01', name: 'PERCENTAGE\nSNAP',           color: '#39ff14', icon: '%'  },
+  { id: 'ex02', num: '02', name: 'RULE OF THUMB\nMULTIPLES',  color: '#00d4ff', icon: '×'  },
+  { id: 'ex03', num: '03', name: 'DOUBLE TRIPLE\nHALVE',      color: '#ffe600', icon: '↕'  },
+  { id: 'ex04', num: '04', name: 'VALUE EQUITY\nASK TRIANGLE', color: '#bf5fff', icon: '▲'  },
+  { id: 'ex05', num: '05', name: 'GROWTH RATE\nSNAP',         color: '#39ff14', icon: '↑'  },
+  { id: 'ex06', num: '06', name: 'BREAK-EVEN\nREASONING',     color: '#00d4ff', icon: '='  },
+  { id: 'ex07', num: '07', name: 'TAM\nESTIMATION',           color: '#ffe600', icon: '◎'  },
+  { id: 'ex08', num: '08', name: 'PITCH\nTRIATHLON',          color: '#ff2d55', icon: '★'  }
 ];
 
 // ---- Screen management ----
@@ -46,70 +55,113 @@ function renderHome() {
     btn.className = 'exercise-btn';
     btn.innerHTML =
       '<span class="ex-num">' + ex.num + '</span>' +
+      '<span class="ex-icon" style="color:' + ex.color + '">' + ex.icon + '</span>' +
       ex.name.replace('\n', '<br>');
     btn.style.borderColor = ex.color;
     btn.onclick = function () { AppState.startExercise(ex.id); };
     grid.appendChild(btn);
   });
+  // Sync active tab to current mode (drill or practice only on home grid)
+  syncModeTabs();
   showScreen('home');
 }
 
-// ---- Mode toggle ----
+function syncModeTabs() {
+  var modes = ['drill', 'practice', 'scores', 'settings'];
+  modes.forEach(function (m) {
+    var tab = document.getElementById('tab-' + m);
+    if (tab) tab.classList.toggle('active', m === AppState.mode);
+  });
+}
 
-AppState.toggleMode = function () {
-  AppState.mode = AppState.mode === 'drill' ? 'practice' : 'drill';
-  var label = document.getElementById('mode-label');
-  var btn   = document.getElementById('mode-toggle-btn');
-  if (AppState.mode === 'drill') {
-    label.textContent = 'DRILL MODE';
-    btn.textContent   = 'SWITCH TO PRACTICE';
-  } else {
-    label.textContent = 'PRACTICE MODE';
-    btn.textContent   = 'SWITCH TO DRILL';
+// ---- Mode selection ----
+
+AppState.setMode = function (mode) {
+  AppState.mode = mode;
+  if (mode === 'drill' || mode === 'practice') {
+    renderHome();
+  } else if (mode === 'scores') {
+    AppState.showHighScores();
+  } else if (mode === 'settings') {
+    AppState.showDifficultyExplained();
   }
 };
+
+// Placeholder handlers — wired fully in later phases
+AppState.showHighScores          = function () { syncModeTabs(); showScreen('home'); };
+AppState.showDifficultyExplained = function () { syncModeTabs(); showScreen('difficulty'); };
 
 // ---- Start an exercise ----
 
 AppState.startExercise = function (exerciseId) {
   AppState.currentExercise = exerciseId;
   AppState.lastExercise    = exerciseId;
-
-  // Create a fresh session for this exercise run
-  AppState.session = new window.BitPitch.Session();
+  AppState.drillStarted    = false;
 
   // Find exercise metadata for the title bar
-  var meta = EXERCISES.find(function (e) { return e.id === exerciseId; });
-  document.getElementById('drill-title').textContent =
-    meta ? meta.name.replace('\n', ' ') : exerciseId.toUpperCase();
+  var meta  = EXERCISES.find(function (e) { return e.id === exerciseId; });
+  var title = meta ? meta.name.replace('\n', ' ') : exerciseId.toUpperCase();
 
-  // Clear the drill timer display
-  document.getElementById('drill-timer').textContent = '';
-  document.getElementById('drill-timer').className = 'drill-timer';
+  // Update drill header
+  document.getElementById('drill-title').textContent      = title;
+  document.getElementById('drill-difficulty').textContent = AppState.difficulty;
+  document.getElementById('drill-timer').textContent      = '';
+  document.getElementById('drill-timer').className        = 'drill-timer';
+  document.getElementById('drill-area').innerHTML         = '';
 
-  // Clear the drill area
-  document.getElementById('drill-area').innerHTML = '';
-
-  // Show the drill screen
   showScreen('drill');
 
-  // Build a context object and hand it to the exercise module.
-  // The exercise uses this to render content and report results.
+  // Render the "Are you ready?" pre-launch screen
+  var iconColor = meta ? meta.color : 'var(--green)';
+  var iconChar  = meta ? meta.icon  : '?';
+
+  document.getElementById('drill-area').innerHTML =
+    '<div class="ready-screen">' +
+      '<div class="ready-icon" style="color:' + iconColor + '">' + iconChar + '</div>' +
+      '<div class="ready-name">' + title + '</div>' +
+      '<div class="diff-row" id="diff-row"></div>' +
+      '<div class="ready-buttons">' +
+        '<button class="btn btn-primary" id="begin-btn" onclick="AppState.beginDrill(\'' + exerciseId + '\')">BEGIN</button>' +
+      '</div>' +
+    '</div>';
+
+  AppState._renderDiffButtons();
+};
+
+// Renders the EASY / MEDIUM / HARD buttons into #diff-row on the ready screen
+AppState._renderDiffButtons = function () {
+  var row = document.getElementById('diff-row');
+  if (!row) return;
+  var levels = ['EASY', 'MEDIUM', 'HARD'];
+  row.innerHTML = levels.map(function (lvl) {
+    var active = AppState.difficulty === lvl ? ' active' : '';
+    return '<button class="diff-btn' + active + '" onclick="AppState._setDifficulty(\'' + lvl + '\')">' + lvl + '</button>';
+  }).join('');
+};
+
+// Sets difficulty and refreshes the button row
+AppState._setDifficulty = function (lvl) {
+  AppState.difficulty = lvl;
+  document.getElementById('drill-difficulty').textContent = lvl;
+  AppState._renderDiffButtons();
+};
+
+// Called when the player clicks BEGIN on the ready screen
+AppState.beginDrill = function (exerciseId) {
+  AppState.drillStarted = true;
+  AppState.session      = new window.BitPitch.Session();
+
+  document.getElementById('drill-area').innerHTML = '';
+
   var context = {
-    container:  document.getElementById('drill-area'),
-    timerEl:    document.getElementById('drill-timer'),
-    mode:       AppState.mode,
-    onComplete: function (result) {
-      // Called by the exercise when one question is answered
-      AppState.session.recordAnswer(result);
-    },
-    onSessionEnd: function () {
-      // Called by the exercise when the full drill set is done
-      AppState.showSummary();
-    }
+    container:    document.getElementById('drill-area'),
+    timerEl:      document.getElementById('drill-timer'),
+    mode:         AppState.mode,
+    difficulty:   AppState.difficulty,
+    onComplete:   function (result) { AppState.session.recordAnswer(result); },
+    onSessionEnd: function ()       { AppState.showSummary(); }
   };
 
-  // Look up and call the correct exercise module
   var exerciseFn = window.BitPitch.exercises && window.BitPitch.exercises[exerciseId];
   if (exerciseFn) {
     exerciseFn(context);
@@ -117,6 +169,28 @@ AppState.startExercise = function (exerciseId) {
     context.container.innerHTML =
       '<p class="text-red" style="padding:24px">Exercise ' + exerciseId + ' not found.</p>';
   }
+};
+
+// Called from RESTART button or drill title click
+AppState.restartDrill = function () {
+  if (!AppState.currentExercise) return;
+  if (AppState.drillStarted) {
+    AppState._showRestartModal();
+  } else {
+    AppState.startExercise(AppState.currentExercise);
+  }
+};
+
+AppState._showRestartModal = function () {
+  var overlay = document.getElementById('modal-overlay');
+  overlay.classList.remove('hidden');
+  document.getElementById('modal-confirm-btn').onclick = function () {
+    overlay.classList.add('hidden');
+    AppState.startExercise(AppState.currentExercise);
+  };
+  document.getElementById('modal-cancel-btn').onclick = function () {
+    overlay.classList.add('hidden');
+  };
 };
 
 // ---- Navigation ----
@@ -138,9 +212,16 @@ AppState.playAgain = function () {
 AppState.showSummary = function () {
   var summary = AppState.session.getSummary();
   var statsEl = document.getElementById('summary-stats');
+  var fe      = window.BitPitch.formatElapsed;
 
   var accuracyColor = summary.accuracy >= 80 ? 'var(--green)' :
                       summary.accuracy >= 50 ? 'var(--yellow)' : 'var(--red)';
+
+  var meta      = EXERCISES.find(function (e) { return e.id === AppState.lastExercise; });
+  var drillName = meta ? meta.name.replace('\n', ' ') : '';
+  document.querySelector('.summary-header').innerHTML =
+    '<p class="summary-drill-name">' + drillName + '</p>' +
+    '<h2 class="summary-title">SESSION COMPLETE!</h2>';
 
   statsEl.innerHTML =
     '<div class="stat-row">' +
@@ -156,19 +237,19 @@ AppState.showSummary = function () {
       '<span class="stat-value" style="color:' + accuracyColor + '">' + summary.accuracy + '%</span>' +
     '</div>' +
     '<div class="stat-row">' +
+      '<span class="stat-label">TOTAL TIME</span>' +
+      '<span class="stat-value">' + fe(summary.totalMs / 1000, true) + '</span>' +
+    '</div>' +
+    '<div class="stat-row">' +
       '<span class="stat-label">AVG TIME</span>' +
-      '<span class="stat-value">' + summary.avgSec + 's</span>' +
+      '<span class="stat-value">' + fe(summary.avgSec, true) + '</span>' +
     '</div>' +
     '<div class="stat-row">' +
       '<span class="stat-label">FASTEST</span>' +
-      '<span class="stat-value text-yellow">' + summary.fastestSec + 's</span>' +
+      '<span class="stat-value text-yellow">' + fe(summary.fastestSec, true) + '</span>' +
     '</div>';
 
-  // Wire play again button to current exercise
-  var meta = EXERCISES.find(function (e) { return e.id === AppState.lastExercise; });
-  if (meta) {
-    document.getElementById('play-again-btn').textContent = 'PLAY AGAIN';
-  }
+  document.getElementById('play-again-btn').textContent = 'PLAY AGAIN';
 
   showScreen('summary');
 };

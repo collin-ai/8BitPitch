@@ -11,7 +11,7 @@ window.BitPitch.exercises = window.BitPitch.exercises || {};
 window.BitPitch.exercises['ex07'] = function (context) {
   var R = window.BitPitch.random;
 
-  var QUESTIONS_PER_SESSION = 5;
+  var QUESTIONS_PER_SESSION = 3;
   var qCount = 0;
   var timer  = new window.BitPitch.Timer();
   var usedIdx = [];
@@ -33,7 +33,10 @@ window.BitPitch.exercises['ex07'] = function (context) {
   function showQuestion(cat) {
     context.container.innerHTML =
       '<div class="drill-card">' +
-        '<div class="drill-progress">QUESTION <span class="current">' + qCount + '</span> / ' + QUESTIONS_PER_SESSION + '</div>' +
+        '<div class="progress-row">' +
+          '<div class="drill-progress">QUESTION <span class="current">' + qCount + '</span> / ' + QUESTIONS_PER_SESSION + '</div>' +
+          '<span class="drill-timer-q" id="drill-timer-q"></span>' +
+        '</div>' +
         '<div class="drill-question">' +
           'MARKET CATEGORY:<br><span class="highlight">' + cat.label.toUpperCase() + '</span>' +
         '</div>' +
@@ -49,7 +52,10 @@ window.BitPitch.exercises['ex07'] = function (context) {
           '<label class="drill-input-label" style="min-width:160px">AVG SPEND / YR:</label>' +
           '<input id="spend-input" class="drill-input" type="text" placeholder="e.g. $200" autocomplete="off" style="width:120px" />' +
         '</div>' +
-        '<button class="btn btn-primary mt-16" id="submit-btn">CALCULATE MY TAM</button>' +
+        '<div class="flex-row" style="gap:12px;margin-top:16px">' +
+          '<button class="btn btn-primary" id="submit-btn">CALCULATE MY TAM</button>' +
+          '<button class="btn btn-danger" id="pass-btn">PASS</button>' +
+        '</div>' +
       '</div>';
 
     var custInput  = document.getElementById('cust-input');
@@ -57,27 +63,77 @@ window.BitPitch.exercises['ex07'] = function (context) {
     custInput.focus();
     timer.start();
 
+    function trySubmit07(e) {
+      if (e.key !== 'Enter') return;
+      e.stopPropagation();
+      var ci = document.getElementById('cust-input');
+      var si = document.getElementById('spend-input');
+      if (ci && si && ci.value.trim() !== '' && si.value.trim() !== '') {
+        var sb = document.getElementById('submit-btn');
+        if (sb && !sb.disabled) sb.click();
+      }
+    }
+    custInput.onkeydown  = trySubmit07;
+    spendInput.onkeydown = trySubmit07;
+
+    var iv;
     if (context.mode === 'drill') {
-      var iv = setInterval(function () {
-        if (!document.getElementById('cust-input')) { clearInterval(iv); return; }
-        context.timerEl.textContent = timer.getElapsedSeconds() + 's';
+      iv = setInterval(function () {
+        var tq = document.getElementById('drill-timer-q');
+        if (!tq) { clearInterval(iv); return; }
+        var s = timer.getElapsedSeconds();
+        tq.textContent = window.BitPitch.formatElapsed(s);
+        tq.className = s > 10 ? 'drill-timer-q warning' : 'drill-timer-q';
       }, 100);
     }
 
     document.getElementById('submit-btn').onclick = function () {
+      if (custInput.value.trim() === '' || spendInput.value.trim() === '') { document.getElementById('pass-btn').click(); return; }
+      clearInterval(iv);
       var elapsed   = timer.stop();
       var userCust  = R.parseUserNumber(custInput.value);
       var userSpend = R.parseUserNumber(spendInput.value);
       var userTAM   = isNaN(userCust) || isNaN(userSpend) ? 0 : userCust * userSpend;
 
-      showSelfGrade(cat, userCust, userSpend, userTAM, elapsed);
+      var sb = document.getElementById('submit-btn');
+      if (sb) { sb.disabled = true; sb.classList.add('btn-submitted'); }
+      custInput.classList.add('input-submitted');
+      spendInput.classList.add('input-submitted');
+
+      showSelfGrade(cat, userCust, userSpend, userTAM, elapsed, false);
+    };
+
+    document.getElementById('pass-btn').onclick = function () {
+      clearInterval(iv);
+      var elapsed = timer.stop();
+      var sb = document.getElementById('submit-btn');
+      if (sb) { sb.disabled = true; sb.classList.add('btn-submitted'); }
+      custInput.value  = 'PASS';
+      spendInput.value = 'PASS';
+      custInput.classList.add('input-submitted');
+      spendInput.classList.add('input-submitted');
+      context.onComplete({ exerciseId: 'ex07', question: cat.label, correct: false, timeMs: elapsed, selfGraded: true });
+      showSelfGrade(cat, 0, 0, 0, elapsed, true);
     };
   }
 
-  function showSelfGrade(cat, userCust, userSpend, userTAM, elapsed) {
-    // Parse the reference values from the string in TAM_CATEGORIES
+  function showSelfGrade(cat, userCust, userSpend, userTAM, elapsed, isPassed) {
     var refCustStr  = cat.customers;
     var refSpendStr = cat.spend;
+
+    if (isPassed) {
+      context.container.innerHTML =
+        '<div class="drill-card">' +
+          '<div style="border-top:1px solid var(--border);padding-top:16px;font-size:9px;color:var(--blue)">' +
+            'REFERENCE ANSWER:<br><br>' +
+            '<span class="text-dim">' + refCustStr + ' customers × ' + refSpendStr + '</span><br>' +
+            'REFERENCE TAM: <strong class="text-green">' + R.formatMoney(cat.answer) + '</strong>' +
+          '</div>' +
+          '<div style="font-size:9px;color:var(--red);margin-top:16px">PASSED — AUTO FAIL</div>' +
+        '</div>';
+      showNextBtn();
+      return;
+    }
 
     context.container.innerHTML =
       '<div class="drill-card">' +
@@ -120,9 +176,12 @@ window.BitPitch.exercises['ex07'] = function (context) {
     context.container.innerHTML +=
       '<button class="btn btn-secondary mt-16" id="next-btn">NEXT &#9654;</button>';
     document.getElementById('next-btn').onclick = function () {
+      document.onkeydown = null;
       timer.reset();
-      context.timerEl.textContent = '';
       nextQuestion();
+    };
+    document.onkeydown = function (e) {
+      if (e.key === 'Enter') { var nb = document.getElementById('next-btn'); if (nb) nb.click(); }
     };
   }
 

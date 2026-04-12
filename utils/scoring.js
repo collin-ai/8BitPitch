@@ -25,14 +25,16 @@ window.BitPitch.Session = function () {
     var total    = answers.length;
     var correct  = answers.filter(function (a) { return a.correct; }).length;
     var times    = answers.map(function (a) { return a.timeMs; });
-    var avgMs    = total > 0 ? Math.round(times.reduce(function (s, t) { return s + t; }, 0) / total) : 0;
+    var sumMs    = times.reduce(function (s, t) { return s + t; }, 0);
+    var avgMs    = total > 0 ? Math.round(sumMs / total) : 0;
     var fastestMs = total > 0 ? Math.min.apply(null, times) : 0;
     return {
       total:      total,
       correct:    correct,
       accuracy:   total > 0 ? Math.round((correct / total) * 100) : 0,
-      avgSec:     (avgMs / 1000).toFixed(1),
-      fastestSec: (fastestMs / 1000).toFixed(1),
+      avgSec:     avgMs / 1000,
+      fastestSec: fastestMs / 1000,
+      totalMs:    sumMs,
       answers:    answers.slice()
     };
   };
@@ -60,4 +62,11 @@ window.BitPitch.isCloseEnough = function (userVal, correctVal, tolerancePct) {
 window.BitPitch.isWithinRange = function (userVal, min, max) {
   if (isNaN(userVal)) return false;
   return userVal >= min && userVal <= max;
+};
+
+// Returns true if userVal rounds to the same 2-decimal-place value as correctVal.
+// Used for Hard difficulty on ÷3 questions (e.g. 8333.33 required).
+window.BitPitch.isCloseEnough2dp = function (userVal, correctVal) {
+  if (isNaN(userVal) || isNaN(correctVal)) return false;
+  return Math.round(userVal * 100) === Math.round(correctVal * 100);
 };

@@ -73,10 +73,11 @@ window.BitPitch.random = (function () {
 
   // Generate a triangle (Ask, Equity%, Valuation) where the math always works out cleanly.
   // Strategy: pick equity% and valuation first, then derive ask = equity * valuation.
+  // When equity is 33, use true division (valuation / 3) so Hard can require 2dp precision.
   function randTriangle() {
     var equity = randFrom(NICE_PERCENTAGES);
     var valuation = randFrom(NICE_VALUATIONS);
-    var ask = Math.round((equity / 100) * valuation);
+    var ask = (equity === 33) ? valuation / 3 : Math.round((equity / 100) * valuation);
     return { ask: ask, equity: equity, valuation: valuation };
   }
 
@@ -110,6 +111,26 @@ window.BitPitch.random = (function () {
     return '' + n;
   }
 
+  // Format a dollar value to a specific number of decimal places (for Hard 2dp display).
+  // Falls back to formatMoney when dp is 0.
+  function formatMoneyDp(n, dp) {
+    if (dp === 0) return formatMoney(Math.round(n));
+    var str = parseFloat(n.toFixed(dp)).toFixed(dp);
+    var parts = str.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return '$' + parts[0] + '.' + parts[1];
+  }
+
+  // Format a plain number to a specific number of decimal places (for Hard 2dp display).
+  // Falls back to formatNumber when dp is 0.
+  function formatNumberDp(n, dp) {
+    if (dp === 0) return formatNumber(Math.round(n));
+    var str = parseFloat(n.toFixed(dp)).toFixed(dp);
+    var parts = str.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts[0] + '.' + parts[1];
+  }
+
   // Public API
   return {
     randFrom: randFrom,
@@ -117,7 +138,9 @@ window.BitPitch.random = (function () {
     randTriangle: randTriangle,
     parseUserNumber: parseUserNumber,
     formatMoney: formatMoney,
+    formatMoneyDp: formatMoneyDp,
     formatNumber: formatNumber,
+    formatNumberDp: formatNumberDp,
     NICE_ASKS: NICE_ASKS,
     NICE_PERCENTAGES: NICE_PERCENTAGES,
     NICE_VALUATIONS: NICE_VALUATIONS,

@@ -12,9 +12,9 @@ Aspiring investors and entrepreneurs can sharpen their deal-math intuition throu
 
 | Attribute | Value |
 |-----------|-------|
-| Version | v0.3 (Draft 3 — In Progress) |
-| Status | Draft 3 in progress — Plans 06-01 to 06-05 defined, not yet started |
-| Last Updated | 2026-04-04 |
+| Version | v0.3 (Draft 3 — Complete; Draft 4 refinements in progress) |
+| Status | Phase 08 complete; Phase 09 not yet planned (see HANDOFF-2026-04-10-p9.md) |
+| Last Updated | 2026-04-10 |
 
 ## Requirements
 
@@ -39,15 +39,40 @@ Aspiring investors and entrepreneurs can sharpen their deal-math intuition throu
 - ~~Tutorial Mode~~ (scrapped)
 - ~~Settings Screens~~ (scrapped)
 
-### Draft 3 — UX Refinements (In Progress)
-- [ ] Rebrand app name to 8BitPitch; remove Tutorial tab (Plan 06-01)
-- [ ] ex03 base numbers show commas (Plan 06-01)
-- [ ] ex02 hint text in yellow; ex08 countdown bar removed, count-up timer (Plan 06-02)
-- [ ] Difficulty badge in drill header matches button height, pinned right (Plan 06-03)
-- [ ] Question counts reduced across all exercises (Plan 06-04)
-- [ ] Settings tab renamed Difficulty Explained; new tolerance info page (Plan 06-05)
+### Draft 3 — UX Refinements (Complete)
+- [x] Rebrand app name to 8BitPitch; remove Tutorial tab (Plan 06-01)
+- [x] ex03 base numbers show commas (Plan 06-01)
+- [x] ex02 hint text in yellow; ex08 countdown bar removed, count-up timer (Plan 06-02)
+- [x] Difficulty badge in drill header matches button height, pinned right (Plan 06-03)
+- [x] Question counts reduced across all exercises (Plan 06-04)
+- [x] Settings tab renamed Difficulty Explained; new tolerance info page (Plan 06-05)
+- [x] Hard 2dp scoring for ÷3 questions; ex03/ex01 equity=33 uses n/3 (Plan 06-05 deviation)
 
-### Draft 4 — Planned
+### Draft 4 — Refinements (Phase 07 — Complete)
+- [x] Enter key submits answer in ex02, ex06, ex07, ex08 (Plan 07-01)
+- [x] Enter key advances to next question in ex08 (Plan 07-01)
+- [x] Session Complete shows drill name and total time (Plan 07-02)
+- [x] Feedback icons (✓/✗ spans) removed from all exercises (Plan 07-03)
+- [x] ex04 wrong feedback shows user's actual answer, not "?" (Plan 07-03)
+- [x] drill-timer-q font size reduced to match drill-progress (Plan 07-04)
+- [x] Timer interval changed to 100ms; mm:ss.t format above 60s (Plan 07-04)
+- [x] Feedback and summary times adopt formatElapsed format (Plan 07-04)
+- [x] time-goal div removed from ex01 and ex04 (Plan 07-05)
+- [x] Brackets removed from drill-difficulty span (Plan 07-05)
+- [x] Restart confirmation uses in-game modal instead of browser confirm() (Plan 07-06)
+- [x] ready-hint div removed from "Are you ready?" screen (Plan 07-06)
+
+### Draft 4 — Refinements (Phase 08 — Complete)
+- [x] diff-exp-title centred over full Difficulty Explained header (Plan 08-01)
+- [x] Feedback box restructured: status → acceptable range → math → your answer → time (Plan 08-02)
+- [x] "Correct Range" renamed "Acceptable Range"; computed tolerance bounds shown (Plan 08-02)
+- [x] Your Answer shown for both correct AND incorrect results (Plan 08-02)
+- [x] Correct results display user's raw input string as Your Answer (Plan 08-02)
+- [x] Blank input on submit triggers pass flow (Plan 08-02)
+- [x] drill-timer-q moved to same flex row as drill-progress; no longer absolute-positioned (Plan 08-03)
+- [x] pass button label changed from I'LL PASS to PASS (Plan 08-04)
+
+### Draft 4 — Later
 - [ ] Pitch simulator mode — full scenario with virtual Sharks
 
 ### Out of Scope

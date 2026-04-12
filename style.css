@@ -77,46 +77,47 @@ html, body {
   letter-spacing: 2px;
 }
 
-/* ---------- HOME: Mode toggle bar ---------- */
-.mode-toggle-bar {
+/* ---------- HOME: 5-button mode bar ---------- */
+.mode-bar {
   display: flex;
-  align-items: center;
-  gap: 16px;
-  background: var(--panel);
-  border: 2px solid var(--border);
-  box-shadow: var(--shadow);
-  padding: 10px 20px;
   width: 100%;
   max-width: 640px;
-  justify-content: space-between;
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
 }
 
-.mode-label {
-  font-size: 9px;
-  color: var(--yellow);
-}
-
-.toggle-btn {
+.mode-tab {
   font-family: 'Press Start 2P', monospace;
-  font-size: 7px;
+  font-size: 6px;
+  background: var(--panel);
+  color: var(--text-dim);
+  border: none;
+  border-right: 2px solid var(--border);
+  padding: 10px 4px;
+  cursor: pointer;
+  flex: 1;
+  text-align: center;
+  letter-spacing: 0.5px;
+  line-height: 2;
+}
+
+.mode-tab:last-child {
+  border-right: none;
+}
+
+.mode-tab:hover:not(.active) {
   background: var(--border);
   color: var(--text);
-  border: 2px solid var(--blue);
-  box-shadow: 3px 3px 0 #000;
-  padding: 8px 12px;
-  cursor: pointer;
-  letter-spacing: 1px;
-  transition: background 0.1s;
 }
 
-.toggle-btn:hover {
-  background: var(--blue);
+.mode-tab.active {
+  background: var(--yellow);
   color: #000;
 }
 
-.toggle-btn:active {
-  box-shadow: 1px 1px 0 #000;
-  transform: translate(2px, 2px);
+.mode-tab:active {
+  opacity: 0.85;
 }
 
 /* ---------- HOME: Exercise grid ---------- */
@@ -159,6 +160,18 @@ html, body {
   margin-bottom: 6px;
 }
 
+.exercise-btn .ex-icon {
+  font-size: 16px;
+  display: block;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+/* Feedback check/X marks — sized to match CORRECT!/WRONG text */
+.feedback-icon {
+  font-size: 10px;
+}
+
 .home-footer {
   font-size: 8px;
   color: var(--text-dim);
@@ -175,11 +188,12 @@ html, body {
 .drill-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
   width: 100%;
   max-width: 640px;
   padding-bottom: 8px;
   border-bottom: 2px solid var(--border);
+  position: relative;
 }
 
 .back-btn {
@@ -191,14 +205,42 @@ html, body {
   padding: 6px 10px;
   cursor: pointer;
   box-shadow: 2px 2px 0 #000;
+  white-space: nowrap;
 }
 
 .back-btn:hover { color: var(--red); border-color: var(--red); }
 
+.restart-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  background: transparent;
+  color: var(--text-dim);
+  border: 2px solid var(--text-dim);
+  padding: 6px 10px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 #000;
+  white-space: nowrap;
+}
+
+.restart-btn:hover { color: var(--yellow); border-color: var(--yellow); }
+
 .drill-title {
+  flex: 1;
+  text-align: center;
   font-size: 9px;
   color: var(--blue);
   letter-spacing: 1px;
+}
+
+#drill-difficulty {
+  order: 1;
+  font-size: 8px;
+  line-height: 1;
+  color: var(--text-dim);
+  border: 2px solid var(--text-dim);
+  padding: 6px 10px;
+  box-shadow: 2px 2px 0 #000;
+  white-space: nowrap;
 }
 
 .drill-timer {
@@ -208,7 +250,75 @@ html, body {
   text-align: right;
 }
 
-.drill-timer.warning { color: var(--red); animation: blink 0.5s step-end infinite; }
+/* ---------- DRILL: Are you ready? screen ---------- */
+.ready-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.ready-icon {
+  font-size: 48px;
+  line-height: 1;
+}
+
+.ready-name {
+  font-size: 10px;
+  color: var(--text);
+  letter-spacing: 1px;
+  line-height: 2;
+}
+
+.ready-hint {
+  font-size: 7px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+  line-height: 2;
+  max-width: 400px;
+}
+
+.ready-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.diff-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+.diff-btn {
+  font-family: inherit;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border: 2px solid var(--green);
+  background: transparent;
+  color: var(--green);
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.diff-btn.active {
+  background: var(--green);
+  color: var(--bg);
+}
+
+.diff-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.drill-timer.warning { color: var(--red); }
 
 /* ---------- DRILL: Body ---------- */
 .drill-body {
@@ -223,12 +333,20 @@ html, body {
 
 /* ---------- Drill cards (used by exercise modules) ---------- */
 .drill-card {
+  position: relative;
   background: var(--panel);
   border: 2px solid var(--border);
   box-shadow: var(--shadow);
   padding: 24px 20px;
   margin-bottom: 16px;
 }
+
+.drill-timer-q {
+  font-size: 8px;
+  color: var(--yellow);
+}
+
+.drill-timer-q.warning { color: var(--red); }
 
 .drill-question {
   font-size: 11px;
@@ -276,6 +394,12 @@ html, body {
   font-size: 8px;
 }
 
+.input-submitted {
+  color: var(--text-dim) !important;
+  background: #111 !important;
+  border-color: var(--text-dim) !important;
+}
+
 /* ---------- Buttons ---------- */
 .btn {
   font-family: 'Press Start 2P', monospace;
@@ -315,6 +439,14 @@ html, body {
 }
 
 .btn-danger:hover { background: var(--red); color: #000; }
+
+.btn-submitted {
+  background: #333 !important;
+  color: var(--text-dim) !important;
+  border-color: var(--text-dim) !important;
+  cursor: default !important;
+  pointer-events: none;
+}
 
 .btn-self-grade {
   font-size: 20px;
@@ -369,6 +501,12 @@ html, body {
 .drill-progress {
   font-size: 8px;
   color: var(--text-dim);
+}
+
+.progress-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 12px;
 }
 
@@ -404,6 +542,13 @@ html, body {
 .summary-header {
   text-align: center;
   padding: 16px 0;
+}
+
+.summary-drill-name {
+  font-size: 7px;
+  color: var(--blue);
+  letter-spacing: 2px;
+  margin-bottom: 10px;
 }
 
 .summary-title {
@@ -467,6 +612,161 @@ html, body {
 .flex-row { display: flex; flex-direction: row; gap: 12px; align-items: center; }
 .flex-col { display: flex; flex-direction: column; gap: 12px; }
 .flex-center { justify-content: center; align-items: center; }
+
+/* ---------- Triangle layout — ex04 ---------- */
+.tri-layout { margin: 16px 0 8px; }
+.tri-row-top { text-align: center; margin-bottom: 12px; }
+.tri-row-bottom { display: flex; justify-content: space-between; gap: 12px; }
+.tri-node {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: 2px 2px 0 var(--border);
+  padding: 10px 14px;
+  min-width: 90px;
+  font-size: 9px;
+  text-align: center;
+  display: inline-block;
+}
+.tri-node-label { color: var(--text-dim); margin-bottom: 4px; letter-spacing: 1px; }
+.tri-node-value { color: var(--green); font-size: 11px; font-weight: bold; }
+.tri-node-blank { border-color: var(--yellow); }
+.tri-node-blank .tri-node-label { color: var(--yellow); }
+.tri-node-blank .drill-input { width: 100%; margin-top: 4px; font-size: 9px; box-sizing: border-box; }
+
+/* ---------- DIFFICULTY EXPLAINED screen ---------- */
+.diff-exp-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 640px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+  position: relative;
+}
+
+.diff-exp-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: var(--yellow);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.diff-exp-body {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.diff-exp-intro {
+  font-size: 7px;
+  color: var(--text-dim);
+  line-height: 2.4;
+  letter-spacing: 0.5px;
+}
+
+.diff-exp-section-label {
+  font-size: 8px;
+  color: var(--blue);
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.diff-exp-table-wrap {
+  overflow-x: auto;
+}
+
+.diff-exp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 7px;
+  line-height: 2;
+}
+
+.diff-exp-table th,
+.diff-exp-table td {
+  border: 2px solid var(--border);
+  padding: 8px 10px;
+  text-align: center;
+  vertical-align: top;
+}
+
+.diff-exp-table thead th {
+  background: var(--panel);
+  letter-spacing: 0.5px;
+}
+
+.diff-exp-table tbody td {
+  background: #0d1520;
+}
+
+.diff-exp-table .col-val {
+  color: var(--text);
+  text-align: left;
+}
+
+.col-exact {
+  color: var(--text-dim);
+  font-size: 6px;
+}
+
+.col-tol {
+  color: var(--text-dim);
+  font-size: 6px;
+}
+
+.diff-exp-table .col-easy { color: var(--green); }
+.diff-exp-table .col-med  { color: var(--yellow); }
+.diff-exp-table .col-hard { color: var(--red); }
+
+.diff-exp-note {
+  font-size: 7px;
+  color: var(--text-dim);
+  line-height: 2.4;
+  letter-spacing: 0.5px;
+}
+
+/* ---------- Restart modal ---------- */
+#modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-box {
+  background: var(--panel);
+  border: 2px solid var(--yellow);
+  box-shadow: 4px 4px 0 #7a6000, 8px 8px 0 #000;
+  padding: 32px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 220px;
+}
+
+.modal-msg {
+  font-size: 11px;
+  color: var(--yellow);
+  letter-spacing: 2px;
+  line-height: 2;
+}
+
+.modal-btns {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
 
 /* ---------- Responsive ---------- */
 @media (max-width: 480px) {

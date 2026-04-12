@@ -33,3 +33,18 @@ window.BitPitch.Timer = function () {
     startTime = null;
   };
 };
+
+// formatElapsed(sec, showDecimals)
+// sec: elapsed time in seconds (float)
+// showDecimals: if true, show 1dp for times under 60s (feedback/summary)
+//               if false/omitted, show integer seconds (live timer display)
+// At/above 60s always shows m:ss.t format.
+window.BitPitch.formatElapsed = function (sec, showDecimals) {
+  if (sec < 60) {
+    return showDecimals ? sec.toFixed(1) + 's' : Math.floor(sec) + 's';
+  }
+  var m = Math.floor(sec / 60);
+  var s = Math.floor(sec % 60);
+  var t = Math.floor((sec * 10) % 10);
+  return m + ':' + (s < 10 ? '0' + s : s) + '.' + t;
+};

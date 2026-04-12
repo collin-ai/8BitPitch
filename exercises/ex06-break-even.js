@@ -26,7 +26,7 @@ window.BitPitch.exercises['ex06'] = function (context) {
     { price: 120, cost: 45,  fixed: 300000 }
   ];
 
-  var QUESTIONS_PER_SESSION = 5;
+  var QUESTIONS_PER_SESSION = 3;
   var qCount = 0;
   var timer  = new window.BitPitch.Timer();
   var usedIdx = [];
@@ -52,7 +52,10 @@ window.BitPitch.exercises['ex06'] = function (context) {
   function showQuestion(s, profitPerUnit, breakEvenUnits) {
     context.container.innerHTML =
       '<div class="drill-card">' +
-        '<div class="drill-progress">QUESTION <span class="current">' + qCount + '</span> / ' + QUESTIONS_PER_SESSION + '</div>' +
+        '<div class="progress-row">' +
+          '<div class="drill-progress">QUESTION <span class="current">' + qCount + '</span> / ' + QUESTIONS_PER_SESSION + '</div>' +
+          '<span class="drill-timer-q" id="drill-timer-q"></span>' +
+        '</div>' +
         '<div class="drill-question">' +
           'PRICE PER UNIT: <span class="highlight">$' + s.price + '</span><br>' +
           'COST PER UNIT:&nbsp;&nbsp;<span class="highlight">$' + s.cost + '</span><br>' +
@@ -67,7 +70,10 @@ window.BitPitch.exercises['ex06'] = function (context) {
           '<label class="drill-input-label" style="min-width:140px">BREAK-EVEN UNITS:</label>' +
           '<input id="units-input" class="drill-input" type="text" placeholder="e.g. 5000" autocomplete="off" style="width:120px" />' +
         '</div>' +
-        '<button class="btn btn-primary mt-16" id="submit-btn">SUBMIT</button>' +
+        '<div class="flex-row" style="gap:12px;margin-top:16px">' +
+          '<button class="btn btn-primary" id="submit-btn">SUBMIT</button>' +
+          '<button class="btn btn-danger" id="pass-btn">PASS</button>' +
+        '</div>' +
       '</div>';
 
     var profitInput = document.getElementById('profit-input');
@@ -75,20 +81,42 @@ window.BitPitch.exercises['ex06'] = function (context) {
     profitInput.focus();
     timer.start();
 
+    [profitInput, unitsInput].forEach(function (inp) {
+      inp.onkeydown = function (e) {
+        if (e.key !== 'Enter') return;
+        e.stopPropagation();
+        var sb = document.getElementById('submit-btn');
+        if (sb && !sb.disabled) sb.click();
+      };
+    });
+
+    var iv;
     if (context.mode === 'drill') {
-      var iv = setInterval(function () {
-        if (!document.getElementById('profit-input')) { clearInterval(iv); return; }
-        context.timerEl.textContent = timer.getElapsedSeconds() + 's';
+      iv = setInterval(function () {
+        var tq = document.getElementById('drill-timer-q');
+        if (!tq) { clearInterval(iv); return; }
+        var s = timer.getElapsedSeconds();
+        tq.textContent = window.BitPitch.formatElapsed(s);
+        tq.className = s > 10 ? 'drill-timer-q warning' : 'drill-timer-q';
       }, 100);
     }
 
     document.getElementById('submit-btn').onclick = function () {
+      var rawProfit = profitInput.value.trim();
+      var rawUnits  = unitsInput.value.trim();
+      if (rawProfit === '' || rawUnits === '') { document.getElementById('pass-btn').click(); return; }
+      clearInterval(iv);
       var elapsed      = timer.stop();
-      var userProfit   = R.parseUserNumber(profitInput.value);
-      var userUnits    = R.parseUserNumber(unitsInput.value);
+      var userProfit   = R.parseUserNumber(rawProfit);
+      var userUnits    = R.parseUserNumber(rawUnits);
       var profitOk     = close(userProfit, profitPerUnit, 2);
       var unitsOk      = close(userUnits, breakEvenUnits, 5);
       var isOk         = profitOk && unitsOk;
+
+      var sb = document.getElementById('submit-btn');
+      if (sb) { sb.disabled = true; sb.classList.add('btn-submitted'); }
+      profitInput.classList.add('input-submitted');
+      unitsInput.classList.add('input-submitted');
 
       context.onComplete({
         exerciseId: 'ex06',
@@ -97,32 +125,67 @@ window.BitPitch.exercises['ex06'] = function (context) {
         timeMs:     elapsed
       });
 
-      showFeedback(s, profitPerUnit, breakEvenUnits, profitOk, unitsOk, isOk, elapsed);
+      showFeedback(s, profitPerUnit, breakEvenUnits, profitOk, unitsOk, isOk, elapsed, userProfit, userUnits, false, rawProfit, rawUnits);
+    };
+
+    document.getElementById('pass-btn').onclick = function () {
+      clearInterval(iv);
+      var elapsed = timer.stop();
+      var sb = document.getElementById('submit-btn');
+      if (sb) { sb.disabled = true; sb.classList.add('btn-submitted'); }
+      profitInput.value = 'PASS';
+      unitsInput.value  = 'PASS';
+      profitInput.classList.add('input-submitted');
+      unitsInput.classList.add('input-submitted');
+      context.onComplete({ exerciseId: 'ex06', question: 'Price $' + s.price + ' Cost $' + s.cost + ' Fixed ' + R.formatMoney(s.fixed), correct: false, timeMs: elapsed });
+      showFeedback(s, profitPerUnit, breakEvenUnits, false, false, false, elapsed, null, null, true, null, null);
     };
   }
 
-  function showFeedback(s, profitPerUnit, breakEvenUnits, profitOk, unitsOk, isOk, elapsed) {
+  function showFeedback(s, profitPerUnit, breakEvenUnits, profitOk, unitsOk, isOk, elapsed, userProfit, userUnits, isPassed, rawProfit, rawUnits) {
     var cls = isOk ? 'feedback-correct' : 'feedback-wrong';
-    var msg = isOk ? '✓ CORRECT!' : '✗ CHECK BELOW';
+    var msg = isOk ? 'CORRECT!' : 'CHECK BELOW';
+
+    // Acceptable ranges (profit ±2%, units ±5% — fixed, no difficulty config)
+    var profLo = (profitPerUnit * 0.98).toFixed(1);
+    var profHi = (profitPerUnit * 1.02).toFixed(1);
+    var unitsLo = Math.round(breakEvenUnits * 0.95).toLocaleString();
+    var unitsHi = Math.round(breakEvenUnits * 1.05).toLocaleString();
+    var acceptableLine =
+      'PROFIT: $' + profLo + ' \u2013 $' + profHi + ' <span class="text-dim" style="font-size:8px">(\u00b12%)</span><br>' +
+      'UNITS: ' + unitsLo + ' \u2013 ' + unitsHi + ' <span class="text-dim" style="font-size:8px">(\u00b15%)</span>';
+
+    // Your answer
+    var yourAnswer;
+    if (isPassed || rawProfit === null) {
+      yourAnswer = 'PASS';
+    } else if (isOk) {
+      yourAnswer = '$' + rawProfit + ' profit / ' + rawUnits + ' units';
+    } else {
+      yourAnswer = '$' + (userProfit !== null ? userProfit : '?') + ' profit / ' + (userUnits !== null ? userUnits : '?') + ' units';
+    }
+
     context.container.innerHTML +=
       '<div class="feedback-box ' + cls + '">' +
         msg + '<br><br>' +
-        'PROFIT / UNIT: <strong>$' + profitPerUnit + '</strong>' +
-        (profitOk ? ' ✓' : ' ✗') + '<br>' +
-        'BREAK-EVEN: <strong>' + breakEvenUnits.toLocaleString() + ' UNITS</strong>' +
-        (unitsOk ? ' ✓' : ' ✗') + '<br>' +
+        acceptableLine + '<br>' +
         '<span class="text-dim" style="font-size:8px">' +
-          '$' + s.price + ' - $' + s.cost + ' = $' + profitPerUnit + ' profit &nbsp; ' +
-          R.formatMoney(s.fixed) + ' ÷ $' + profitPerUnit + ' = ' + breakEvenUnits.toLocaleString() + ' units' +
-        '</span>' +
-        (context.mode === 'drill' ? '<br>Time: ' + (elapsed/1000).toFixed(1) + 's' : '') +
+          '$' + s.price + ' \u2212 $' + s.cost + ' = $' + profitPerUnit + ' profit &nbsp; ' +
+          R.formatMoney(s.fixed) + ' \u00f7 $' + profitPerUnit + ' = ' + breakEvenUnits.toLocaleString() + ' units' +
+        '</span><br>' +
+        'YOUR ANSWER: <span class="text-dim">' + yourAnswer + '</span>' +
+        (context.mode === 'drill' ? '<br>Time: ' + window.BitPitch.formatElapsed(elapsed/1000, true) : '') +
       '</div>' +
       '<button class="btn btn-secondary mt-16" id="next-btn">NEXT &#9654;</button>';
 
     document.getElementById('next-btn').onclick = function () {
+      document.onkeydown = null;
       timer.reset();
-      context.timerEl.textContent = '';
       nextQuestion();
+    };
+
+    document.onkeydown = function (e) {
+      if (e.key === 'Enter') { var nb = document.getElementById('next-btn'); if (nb) nb.click(); }
     };
   }
 
