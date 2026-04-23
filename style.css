@@ -39,6 +39,7 @@ html, body {
 /* ---------- Screens ---------- */
 .screen {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -838,5 +839,5 @@ html, body {
 @media (max-width: 480px) {
   .exercise-grid { grid-template-columns: 1fr; }
   .title { font-size: 22px; }
-  .drill-input { width: 160px; }
+  .drill-input { width: 160px; font-size: 16px; }
 }

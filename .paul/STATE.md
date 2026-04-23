@@ -2,10 +2,10 @@
 
 ## Current Position
 
-Milestone: Milestone 4 (Refinements) — **COMPLETE**
-Phase: 9 — Phase 09-03 COMPLETE
+Milestone: Inter-milestone polish (pre-Milestone 5)
+Phase: 09-04 — Mobile + ex02 polish — **COMPLETE**
 Status: PLAN ✓ — APPLY ✓ — UNIFY ✓
-Last activity: 2026-04-22 — Phase 09-03 applied and unified; Milestone 4 closed
+Last activity: 2026-04-23 — Mobile viewport fixes; ex02 UI trim; paused for numpad work
 
 ## Loop Position
 
@@ -16,6 +16,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
   ✓        ✓        ✓     [Phase 09-01 — complete]
   ✓        ✓        ✓     [Phase 09-02 — code review — complete]
   ✓        ✓        ✓     [Phase 09-03 — bug fixes + testing — complete]
+  ✓        ✓        ✓     [Phase 09-04 — mobile + ex02 polish — complete]
 ```
 
 ## Key Decisions
@@ -105,11 +106,12 @@ PLAN ──▶ APPLY ──▶ UNIFY
 ## Session Continuity
 
 Last session: 2026-04-22
-Stopped at: Phase 09-03 APPLIED and UNIFIED — Milestone 4 complete
-Next action: Begin Milestone 5 — Phase 10 (Supabase Score Tracking) when ready
-Resume file: `.paul/HANDOFF-2026-04-22.md` (to be written at pause)
+Stopped at: Milestone 4 git push complete — paused before Milestone 5
+Next action: Begin Milestone 5 — Phase 10 (Supabase Score Tracking); update git remote URL first
+Resume file: `.paul/HANDOFF-2026-04-22-19-21-21.md`
 Resume context:
-- Milestone 4 COMPLETE — all Phase 09 done (09-01 Numpad, 09-02 Code Review, 09-03 Bug Fixes + Testing)
+- Milestone 4 COMPLETE and pushed to GitHub (commit eacdf62, 29 files)
+- GitHub repo moved to https://github.com/collin-ai/8BitPitch.git — update remote before next push
 - tests/tests.html created and passing — covers parseUserNumber, formatMoney, isCloseEnough, isCloseEnough2dp, ex06 scenarios, TAM categories
 - Milestone 5 planned: Supabase scores, username/password auth, Google Form feedback, waitlist
 - Milestone 6 planned: code review, cleanup, GitHub push + Vercel deploy
@@ -117,10 +119,10 @@ Resume context:
 
 ## How to Resume (fresh context)
 
-1. Read `.paul/HANDOFF-2026-04-22-15-00-00.md` for project overview
+1. Read `.paul/HANDOFF-2026-04-22-19-21-21.md` for full session context
 2. Read this STATE.md for decisions and plan history
-3. Read `.paul/phases/09-refinements/09-03-PLAN.md` for the fix plan
-4. APPLY the plan — implement all tasks in order
+3. Update git remote: `git remote set-url origin https://github.com/collin-ai/8BitPitch.git`
+4. Confirm Supabase account status with user, then run `/paul:plan` for Phase 10
 
 ## Tooling Setup
 

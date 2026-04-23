@@ -15,21 +15,21 @@ window.BitPitch.exercises['ex02'] = function (context) {
   var INDUSTRIES = [
     {
       label:   'CONSUMER PRODUCT',
-      desc:    'Physical goods, food, retail',
       minMult: 1, maxMult: 3,
-      color:   'var(--blue)'
+      color:   'var(--blue)',
+      rangeLine: true
     },
     {
       label:   'RECURRING SaaS',
-      desc:    'Software with monthly/annual subscriptions',
       minMult: 4, maxMult: 10,
-      color:   'var(--green)'
+      color:   'var(--green)',
+      rangeLine: true
     },
     {
       label:   'HIGH-GROWTH SUBSCRIPTION',
-      desc:    'Fast-growing SaaS or subscription business',
       minMult: 8, maxMult: 15,
-      color:   'var(--yellow)'
+      color:   'var(--yellow)',
+      rangeLine: false
     }
   ];
 
@@ -59,8 +59,7 @@ window.BitPitch.exercises['ex02'] = function (context) {
         '</div>' +
         '<div class="drill-question">' +
           'COMPANY: <span class="highlight">' + company + '</span><br><br>' +
-          'INDUSTRY: <span style="color:' + industry.color + '">' + industry.label + '</span><br>' +
-          '<span class="text-dim" style="font-size:8px">(' + industry.desc + ')</span><br><br>' +
+          'INDUSTRY: <span style="color:' + industry.color + '">' + industry.label + (industry.rangeLine ? '<br>' : ' ') + '(' + industry.minMult + '\u2013' + industry.maxMult + '\u00d7 Rev)</span><br><br>' +
           'ANNUAL REVENUE: <span class="highlight">' + R.formatMoney(revenue) + '</span>' +
         '</div>' +
         '<div style="font-size:9px;color:var(--yellow);margin:16px 0 8px">ESTIMATE THE VALUATION RANGE:</div>' +
@@ -71,9 +70,6 @@ window.BitPitch.exercises['ex02'] = function (context) {
         '<div class="drill-input-row">' +
           '<label class="drill-input-label">HIGH ($):</label>' +
           '<input id="high-input" class="drill-input" type="text" placeholder="e.g. $3M" autocomplete="off" style="width:140px" />' +
-        '</div>' +
-        '<div class="text-yellow mt-8" style="font-size:8px">' +
-          'HINT: ' + industry.label + ' = ' + industry.minMult + '–' + industry.maxMult + '× revenue' +
         '</div>' +
         '<div class="flex-row" style="gap:12px;margin-top:16px">' +
           '<button class="btn btn-primary" id="submit-btn">SUBMIT</button>' +
