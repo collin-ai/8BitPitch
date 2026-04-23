@@ -68,6 +68,7 @@ window.BitPitch.exercises['ex03'] = function (context) {
         '<div class="flex-row" style="gap:12px;margin-top:16px">' +
           '<button class="btn btn-primary" id="submit-btn">SUBMIT</button>' +
           '<button class="btn btn-danger" id="pass-btn">PASS</button>' +
+          '<button class="btn numpad-toggle-btn" type="button" onclick="BitPitch.Numpad.toggle()" onmousedown="return false">#</button>' +
         '</div>' +
       '</div>';
 
@@ -157,7 +158,7 @@ window.BitPitch.exercises['ex03'] = function (context) {
     if (isPassed || rawInput === null || rawInput === '') {
       yourAnswer = 'PASS';
     } else if (isOk) {
-      yourAnswer = rawInput;
+      yourAnswer = esc(rawInput);
     } else {
       yourAnswer = userVal !== null ? R.formatNumber(Math.round(userVal)) : '?';
     }

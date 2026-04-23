@@ -95,6 +95,7 @@ window.BitPitch.exercises['ex08'] = function (context) {
           '<div class="flex-row" style="gap:12px;margin-top:16px">' +
             '<button class="btn btn-primary" id="submit-all-btn">SUBMIT ALL</button>' +
             '<button class="btn btn-danger"  id="giveup-btn">GIVE UP</button>' +
+            '<button class="btn numpad-toggle-btn" type="button" onclick="BitPitch.Numpad.toggle()" onmousedown="return false">#</button>' +
           '</div>' +
         '</div>' +
       '</div>';
@@ -142,7 +143,7 @@ window.BitPitch.exercises['ex08'] = function (context) {
       var q2Ok = close(userMult, pitch.multiple,        20);
       var q3Ok = close(userBE,   pitch.breakEvenOnAsk,  30);
 
-      var allOk = q1Ok && q2Ok;
+      var allOk = q1Ok && q2Ok && q3Ok;
 
       context.onComplete({
         exerciseId: 'ex08',
@@ -170,7 +171,7 @@ window.BitPitch.exercises['ex08'] = function (context) {
   }
 
   function showFeedback(pitch, q1Ok, q2Ok, q3Ok, elapsed, gaveUp, rawVal, rawMult, rawBE) {
-    var overallOk = !gaveUp && q1Ok && q2Ok;
+    var overallOk = !gaveUp && q1Ok && q2Ok && q3Ok;
     var cls = overallOk ? 'feedback-correct' : 'feedback-wrong';
     var msg = overallOk ? 'SHARP INVESTOR!' : (gaveUp ? 'GAVE UP' : 'KEEP TRAINING');
 
@@ -188,9 +189,9 @@ window.BitPitch.exercises['ex08'] = function (context) {
     if (gaveUp || rawVal === null) {
       yourAnswers = 'PASS / PASS / PASS';
     } else if (overallOk) {
-      yourAnswers = rawVal + ' / ' + rawMult + ' / ' + rawBE;
+      yourAnswers = esc(rawVal) + ' / ' + esc(rawMult) + ' / ' + esc(rawBE);
     } else {
-      yourAnswers = (rawVal || '?') + ' / ' + (rawMult || '?') + ' / ' + (rawBE || '?');
+      yourAnswers = esc(rawVal || '?') + ' / ' + esc(rawMult || '?') + ' / ' + esc(rawBE || '?');
     }
 
     context.container.innerHTML +=

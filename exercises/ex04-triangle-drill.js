@@ -70,6 +70,7 @@ window.BitPitch.exercises['ex04'] = function (context) {
         '<div class="flex-row" style="gap:12px;margin-top:16px">' +
           '<button class="btn btn-primary" id="submit-btn">SUBMIT</button>' +
           '<button class="btn btn-danger"  id="pass-btn">PASS</button>' +
+          '<button class="btn numpad-toggle-btn" type="button" onclick="BitPitch.Numpad.toggle()" onmousedown="return false">#</button>' +
         '</div>' +
       '</div>';
 
@@ -94,7 +95,17 @@ window.BitPitch.exercises['ex04'] = function (context) {
       clearInterval(timerIv);
       var elapsed = timer.stop();
       var userVal = R.parseUserNumber(rawInput);
-      var isOk    = close(userVal, correctAnswer, 5);
+      var isOk;
+      if (type === 'ask' && tri.equity === 33) {
+        var cfg = (DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { pct33: 5 };
+        if (context.difficulty === 'HARD') {
+          isOk = window.BitPitch.isCloseEnough2dp(userVal, correctAnswer);
+        } else {
+          isOk = close(userVal, correctAnswer, cfg.pct33);
+        }
+      } else {
+        isOk = close(userVal, correctAnswer, 5);
+      }
 
       var sb = document.getElementById('submit-btn');
       if (sb) { sb.disabled = true; sb.classList.add('btn-submitted'); }
@@ -142,7 +153,7 @@ window.BitPitch.exercises['ex04'] = function (context) {
     if (isPassed || rawInput === null || rawInput === '') {
       yourAnswer = 'PASS';
     } else if (isOk) {
-      yourAnswer = rawInput;
+      yourAnswer = esc(rawInput);
     } else {
       var pv = R.parseUserNumber(rawInput);
       yourAnswer = (type === 'equity') ? (isNaN(pv) ? '?' : pv + '%') : R.formatMoney(pv);

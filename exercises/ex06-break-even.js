@@ -73,6 +73,7 @@ window.BitPitch.exercises['ex06'] = function (context) {
         '<div class="flex-row" style="gap:12px;margin-top:16px">' +
           '<button class="btn btn-primary" id="submit-btn">SUBMIT</button>' +
           '<button class="btn btn-danger" id="pass-btn">PASS</button>' +
+          '<button class="btn numpad-toggle-btn" type="button" onclick="BitPitch.Numpad.toggle()" onmousedown="return false">#</button>' +
         '</div>' +
       '</div>';
 
@@ -160,7 +161,7 @@ window.BitPitch.exercises['ex06'] = function (context) {
     if (isPassed || rawProfit === null) {
       yourAnswer = 'PASS';
     } else if (isOk) {
-      yourAnswer = '$' + rawProfit + ' profit / ' + rawUnits + ' units';
+      yourAnswer = '$' + esc(rawProfit) + ' profit / ' + esc(rawUnits) + ' units';
     } else {
       yourAnswer = '$' + (userProfit !== null ? userProfit : '?') + ' profit / ' + (userUnits !== null ? userUnits : '?') + ' units';
     }

@@ -2,10 +2,10 @@
 
 ## Current Position
 
-Milestone: Milestone 4 (Refinements) — **IN PROGRESS**
-Phase: 8 — **DONE** — more refinements planned
+Milestone: Milestone 4 (Refinements) — **COMPLETE**
+Phase: 9 — Phase 09-03 COMPLETE
 Status: PLAN ✓ — APPLY ✓ — UNIFY ✓
-Last activity: 2026-04-10 — Phase 08 all 4 plans applied and unified
+Last activity: 2026-04-22 — Phase 09-03 applied and unified; Milestone 4 closed
 
 ## Loop Position
 
@@ -13,7 +13,9 @@ Last activity: 2026-04-10 — Phase 08 all 4 plans applied and unified
 PLAN ──▶ APPLY ──▶ UNIFY
   ✓        ✓        ✓     [Phase 07 complete]
   ✓        ✓        ✓     [Phase 08 complete]
-  ·        ·        ·     [Phase 09 — not yet planned]
+  ✓        ✓        ✓     [Phase 09-01 — complete]
+  ✓        ✓        ✓     [Phase 09-02 — code review — complete]
+  ✓        ✓        ✓     [Phase 09-03 — bug fixes + testing — complete]
 ```
 
 ## Key Decisions
@@ -92,18 +94,33 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | 08-03 | drill-timer-q in progress row | DONE |
 | 08-04 | pass-btn label | DONE |
 
+## Phase 09 Plan Progress
+
+| Plan | Name | Status |
+|------|------|--------|
+| 09-01 | Mobile Numberpad | DONE |
+| 09-02 | Code Review | DONE |
+| 09-03 | Bug Fixes + Testing | DONE |
+
 ## Session Continuity
 
-Last session: 2026-04-10
-Stopped at: Phase 08 fully complete (PLAN + APPLY + UNIFY); more refinements coming
-Next action: Plan Phase 09 — user to provide new refinement requirements
-Resume file: `.paul/HANDOFF-2026-04-10-p9.md`
+Last session: 2026-04-22
+Stopped at: Phase 09-03 APPLIED and UNIFIED — Milestone 4 complete
+Next action: Begin Milestone 5 — Phase 10 (Supabase Score Tracking) when ready
+Resume file: `.paul/HANDOFF-2026-04-22.md` (to be written at pause)
+Resume context:
+- Milestone 4 COMPLETE — all Phase 09 done (09-01 Numpad, 09-02 Code Review, 09-03 Bug Fixes + Testing)
+- tests/tests.html created and passing — covers parseUserNumber, formatMoney, isCloseEnough, isCloseEnough2dp, ex06 scenarios, TAM categories
+- Milestone 5 planned: Supabase scores, username/password auth, Google Form feedback, waitlist
+- Milestone 6 planned: code review, cleanup, GitHub push + Vercel deploy
+- Deferred items (C-5, R-1, R-3, R-4, R-5, E-2, W-4, T-4) remain for Milestone 6
 
 ## How to Resume (fresh context)
 
-1. Read `.paul/HANDOFF-2026-04-10-p9.md` for current state summary
+1. Read `.paul/HANDOFF-2026-04-22-15-00-00.md` for project overview
 2. Read this STATE.md for decisions and plan history
-3. Begin Phase 09 PLAN based on user's next requirements
+3. Read `.paul/phases/09-refinements/09-03-PLAN.md` for the fix plan
+4. APPLY the plan — implement all tasks in order
 
 ## Tooling Setup
 
@@ -116,9 +133,10 @@ Resume file: `.paul/HANDOFF-2026-04-10-p9.md`
 
 ## Deferred Items
 
-- Cross-browser visual check (Firefox, Safari) — cosmetic, not blocking
-- High Scores, Tutorial Mode — deferred to Draft 4
-- Milestone 4 (Pitch Simulator) — phases TBD
+- Cross-browser visual check (Firefox, Safari) — cosmetic, deferred to Milestone 6
+- C-5, R-1, R-3, R-4, R-5, E-2, W-4 — low-severity, deferred to Milestone 6 code cleanup
+- Seeded RNG (T-4) — deferred; not needed until debugging is a problem
+- Pitch Simulator — removed from Milestone 5 scope; indefinitely deferred
 
 ---
-*Updated: 2026-04-10 — Phase 08 fully complete (PLAN + APPLY + UNIFY); Phase 09 not yet planned*
+*Updated: 2026-04-22 — Phase 09-03 complete; Milestone 4 closed; Milestones 5 & 6 planned*

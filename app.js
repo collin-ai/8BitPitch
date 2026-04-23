@@ -7,6 +7,14 @@
 //   4. Shows the summary screen after a session
 // ============================================================
 
+// HTML-escapes a string for safe insertion into innerHTML
+function esc(s) {
+  var d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+
+// NOTE: 'AppState' is referenced by name in inline onclick attributes in index.html — do not rename without updating HTML.
 // Global application state — one object that holds everything
 var AppState = {
   mode:            'drill',    // 'drill', 'practice', 'scores', 'settings'
@@ -56,7 +64,7 @@ function renderHome() {
     btn.innerHTML =
       '<span class="ex-num">' + ex.num + '</span>' +
       '<span class="ex-icon" style="color:' + ex.color + '">' + ex.icon + '</span>' +
-      ex.name.replace('\n', '<br>');
+      ex.name.replace(/\n/g, '<br>');
     btn.style.borderColor = ex.color;
     btn.onclick = function () { AppState.startExercise(ex.id); };
     grid.appendChild(btn);
@@ -94,13 +102,14 @@ AppState.showDifficultyExplained = function () { syncModeTabs(); showScreen('dif
 // ---- Start an exercise ----
 
 AppState.startExercise = function (exerciseId) {
+  document.onkeydown = null;
   AppState.currentExercise = exerciseId;
   AppState.lastExercise    = exerciseId;
   AppState.drillStarted    = false;
 
   // Find exercise metadata for the title bar
   var meta  = EXERCISES.find(function (e) { return e.id === exerciseId; });
-  var title = meta ? meta.name.replace('\n', ' ') : exerciseId.toUpperCase();
+  var title = meta ? meta.name.replace(/\n/g, ' ') : exerciseId.toUpperCase();
 
   // Update drill header
   document.getElementById('drill-title').textContent      = title;
@@ -122,6 +131,7 @@ AppState.startExercise = function (exerciseId) {
       '<div class="diff-row" id="diff-row"></div>' +
       '<div class="ready-buttons">' +
         '<button class="btn btn-primary" id="begin-btn" onclick="AppState.beginDrill(\'' + exerciseId + '\')">BEGIN</button>' +
+        '<button class="btn numpad-toggle-btn" type="button" onclick="BitPitch.Numpad.toggle()" onmousedown="return false">#</button>' +
       '</div>' +
     '</div>';
 
@@ -196,6 +206,8 @@ AppState._showRestartModal = function () {
 // ---- Navigation ----
 
 AppState.goHome = function () {
+  document.onkeydown = null;
+  if (window.BitPitch.Numpad) window.BitPitch.Numpad.onDrillEnd();
   renderHome();
 };
 
@@ -210,6 +222,7 @@ AppState.playAgain = function () {
 // ---- Summary screen ----
 
 AppState.showSummary = function () {
+  if (window.BitPitch.Numpad) window.BitPitch.Numpad.onDrillEnd();
   var summary = AppState.session.getSummary();
   var statsEl = document.getElementById('summary-stats');
   var fe      = window.BitPitch.formatElapsed;
@@ -218,7 +231,7 @@ AppState.showSummary = function () {
                       summary.accuracy >= 50 ? 'var(--yellow)' : 'var(--red)';
 
   var meta      = EXERCISES.find(function (e) { return e.id === AppState.lastExercise; });
-  var drillName = meta ? meta.name.replace('\n', ' ') : '';
+  var drillName = meta ? meta.name.replace(/\n/g, ' ') : '';
   document.querySelector('.summary-header').innerHTML =
     '<p class="summary-drill-name">' + drillName + '</p>' +
     '<h2 class="summary-title">SESSION COMPLETE!</h2>';
@@ -262,3 +275,6 @@ window.BitPitch.exercises = window.BitPitch.exercises || {};
 
 // Render the home screen when the page loads
 renderHome();
+
+// Initialise numpad (sets up MutationObserver and focus tracking)
+if (window.BitPitch.Numpad) window.BitPitch.Numpad.init();

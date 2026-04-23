@@ -92,6 +92,7 @@ window.BitPitch.random = (function () {
     else if (s.endsWith('K')) { multiplier = 1000; s = s.slice(0, -1); }
     else if (s.endsWith('B')) { multiplier = 1000000000; s = s.slice(0, -1); }
     var n = parseFloat(s);
+    if (!isFinite(n) || n < 0) return NaN;
     return isNaN(n) ? NaN : n * multiplier;
   }
 

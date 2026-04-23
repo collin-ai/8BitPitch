@@ -55,6 +55,7 @@ window.BitPitch.exercises['ex07'] = function (context) {
         '<div class="flex-row" style="gap:12px;margin-top:16px">' +
           '<button class="btn btn-primary" id="submit-btn">CALCULATE MY TAM</button>' +
           '<button class="btn btn-danger" id="pass-btn">PASS</button>' +
+          '<button class="btn numpad-toggle-btn" type="button" onclick="BitPitch.Numpad.toggle()" onmousedown="return false">#</button>' +
         '</div>' +
       '</div>';
 
@@ -158,6 +159,8 @@ window.BitPitch.exercises['ex07'] = function (context) {
       '</div>';
 
     function grade(correct) {
+      document.getElementById('thumb-up').disabled   = true;
+      document.getElementById('thumb-down').disabled = true;
       context.onComplete({
         exerciseId: 'ex07',
         question:   cat.label,

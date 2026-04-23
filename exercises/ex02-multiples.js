@@ -78,6 +78,7 @@ window.BitPitch.exercises['ex02'] = function (context) {
         '<div class="flex-row" style="gap:12px;margin-top:16px">' +
           '<button class="btn btn-primary" id="submit-btn">SUBMIT</button>' +
           '<button class="btn btn-danger" id="pass-btn">PASS</button>' +
+          '<button class="btn numpad-toggle-btn" type="button" onclick="BitPitch.Numpad.toggle()" onmousedown="return false">#</button>' +
         '</div>' +
       '</div>';
 
@@ -151,7 +152,7 @@ window.BitPitch.exercises['ex02'] = function (context) {
     if (isPassed || rawLow === null) {
       yourAnswer = 'PASS / PASS';
     } else if (isOk) {
-      yourAnswer = rawLow + ' \u2013 ' + rawHigh;
+      yourAnswer = esc(rawLow) + ' \u2013 ' + esc(rawHigh);
     } else {
       yourAnswer = R.formatMoney(userLow) + ' \u2013 ' + R.formatMoney(userHigh);
     }

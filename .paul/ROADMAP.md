@@ -101,7 +101,7 @@ Status: **COMPLETE** (2026-04-04 → 2026-04-05)
 
 ## Milestone 4: Draft 4 — Refinements
 
-Status: **IN PROGRESS** (2026-04-05 → )
+Status: **COMPLETE** (2026-04-05 → 2026-04-22)
 
 ### Phase 07: Refinement Plans
 
@@ -127,7 +127,9 @@ Status: **IN PROGRESS** (2026-04-05 → )
 
 | Plan | Name | Status | Scope |
 |------|------|--------|-------|
-| TBD | (next refinements) | **NOT PLANNED** | To be defined by user |
+| 09-01 | Mobile Numberpad | **DONE** | Numpad toggle + panel; inputmode=none; toggle in flex-row; ENT submits; toggle on ready screen |
+| 09-02 | Code Review | **DONE** | Adversarial review of full codebase; 22 findings documented; 3 medium severity |
+| 09-03 | Bug Fixes + Testing | **DONE** | Fix C-1/C-2/C-3 (medium), selected low-severity items, create tests/tests.html |
 
 ---
 
@@ -157,11 +159,33 @@ Additional global changes:
 
 ---
 
-## Milestone 5 (Planned): Draft 5 — Pitch Simulator
+## Milestone 5 (Planned): Draft 5 — New Features
 
-**Goal:** Full scenario — user pitches a company, virtual Sharks negotiate
-**Prerequisite:** Draft 4 refinements complete
-**Phases:** TBD
+Status: **PLANNED**
+
+**Goal:** Add user accounts, score persistence, feedback form, and waitlist — requires web hosting (Vercel)
+**Prerequisite:** Milestone 4 complete (all 09-03 fixes applied)
+
+| Phase | Name | Status | Scope |
+|-------|------|--------|-------|
+| 10 | Supabase Score Tracking | Planned | Supabase project setup; write session scores to DB; display on High Scores screen |
+| 11 | User Authentication | Planned | Username + password auth via Supabase Auth; login/register screens; scores linked to user |
+| 12 | Feedback + Waitlist | Planned | Embedded Google Form for feedback; waitlist signup form (email capture) |
+
+---
+
+## Milestone 6 (Planned): Draft 6 — Code Review + Deploy
+
+Status: **PLANNED**
+
+**Goal:** Final code quality pass and public launch on GitHub + Vercel
+**Prerequisite:** Milestone 5 complete
+
+| Phase | Name | Status | Scope |
+|-------|------|--------|-------|
+| 13 | Code Cleanup | Planned | Deferred refactors (R-1, R-3, R-4, R-5), timerEl consistency, stale interval cleanup |
+| 14 | Final Code Review | Planned | Adversarial review post-features; cross-browser check (Firefox, Safari) |
+| 15 | Deploy | Planned | Push to GitHub; configure Vercel; verify live at production URL |
 
 ---
 
@@ -248,4 +272,55 @@ Page includes a MENU button to return to the home screen.
 
 ---
 
-*Updated: 2026-04-10 — Phase 08 complete (08-01 through 08-04); Phase 09 not yet planned*
+---
+
+## Plan 09 Requirements Reference
+
+### Plan 09-01: Mobile Numberpad
+- New `utils/numpad.js` — `window.BitPitch.Numpad` module
+- Toggle button (`#`) purple when off, blue fill when on — appears in drill card flex-row (alongside SUBMIT/PASS) and on "Are you ready?" screen
+- Numberpad panel below drill card — blue border, 5-column CSS grid, 19 keys: 0–9, K, M, comma, period, ←, →, DEL, TAB, ENT (×2 wide)
+- `inputmode="none"` on `.drill-input` when active prevents native keyboard + viewport zoom
+- `.numpad-mode` body class sets `font-size:16px` on inputs (iOS zoom fix)
+- Panel hides during feedback phase; re-shows on next question (MutationObserver)
+- `_on` state persists across drills — user sets once per session
+- ENT key: clicks submit button directly (not dispatch to document)
+- No changes to exercise scoring, timer, or feedback logic
+
+---
+
+### Plan 09-02: Code Review
+- Adversarial review of all source files (exercises, utils, app.js, index.html, style.css, numpad.js)
+- 22 findings: 3 medium, 17 low, 2 low→medium (context-dependent), 4 testing gaps
+- Priority findings: C-1 (ex04 difficulty inactive), C-2 (ex08 Q3 unscored), C-3 (ex07 double-submit)
+- No code changed — findings documented for future triage
+
+### Plan 09-03: Bug Fixes + Testing
+
+**Group A — Medium severity (correctness bugs)**
+- C-1: ex04 `submit()` — replace hardcoded `close(userVal, correctAnswer, 5)` with `DIFFICULTY_CONFIG` lookup matching ex01 (lines 97–106); apply `isCloseEnough2dp` for HARD + equity=33 case
+- C-2: ex08 line 146 — change `var allOk = q1Ok && q2Ok` → `var allOk = q1Ok && q2Ok && q3Ok`
+- C-3: ex07 lines 172–173 — disable `#thumb-up` and `#thumb-down` at top of `grade()`, before `context.onComplete()`
+
+**Group B — Low severity (selected high-value items)**
+- C-4: app.js lines 59, 103 — `replace('\n', '<br>')` → `replace(/\n/g, '<br>')`
+- R-2: style.css line 8 — remove `@import` Google Fonts (kept in index.html `<link>`)
+- W-1: index.html `<head>` — add `<link rel="icon" href="data:,">` to suppress favicon 404
+- W-2: index.html `<head>` — add `<meta name="description">` and OG tags (`og:title`, `og:description`, `og:type`)
+- S-1: add `esc(s)` helper to app.js; wrap `rawInput` in `esc()` in every exercise `showFeedback` (8 files)
+- S-2: app.js — add comment near `AppState` declaration noting the name is referenced by inline onclick in index.html
+- E-1: app.js — add `document.onkeydown = null` in `AppState.goHome()` and at start of `AppState.startExercise()`
+- E-3: utils/random.js line 86 — after `parseFloat`, add `if (!isFinite(n) || n < 0) return NaN;`
+
+**Group C — Testing harness**
+- Create `tests/tests.html` — plain HTML + inline script; loads utils/ files; runs pass/fail assertions to page
+- T-1: parseUserNumber — "$1.5M", "500K", "1,000", "", "abc", "0", "1.2B"
+- T-1: formatMoney, formatElapsed — spot checks
+- T-1: isCloseEnough, isWithinRange, isCloseEnough2dp — basic cases
+- T-2: isCloseEnough boundary — exactly at tolerance passes; one unit beyond fails
+- T-3: ex06 scenario sanity — revenue − costs === profit; break-even formula verified
+- T-3: TAM category sanity — customers × spend === answer for each entry
+
+---
+
+*Updated: 2026-04-22 — Milestone 4 complete; Phase 09-03 done*

@@ -12,9 +12,9 @@ Aspiring investors and entrepreneurs can sharpen their deal-math intuition throu
 
 | Attribute | Value |
 |-----------|-------|
-| Version | v0.3 (Draft 3 — Complete; Draft 4 refinements in progress) |
-| Status | Phase 08 complete; Phase 09 not yet planned (see HANDOFF-2026-04-10-p9.md) |
-| Last Updated | 2026-04-10 |
+| Version | v0.4 (Draft 4 — Complete) |
+| Status | Milestone 4 complete — all Phase 09 done |
+| Last Updated | 2026-04-22 |
 
 ## Requirements
 
@@ -72,12 +72,39 @@ Aspiring investors and entrepreneurs can sharpen their deal-math intuition throu
 - [x] drill-timer-q moved to same flex row as drill-progress; no longer absolute-positioned (Plan 08-03)
 - [x] pass button label changed from I'LL PASS to PASS (Plan 08-04)
 
-### Draft 4 — Later
-- [ ] Pitch simulator mode — full scenario with virtual Sharks
+### Draft 4 — Refinements (Phase 09 — Complete)
+- [x] Mobile numberpad — toggle button, panel below drill card, inputmode=none (Plan 09-01)
+- [x] Numberpad toggle in flex-row alongside SUBMIT/PASS (Plan 09-01 refinement A)
+- [x] ENT key directly submits (Plan 09-01 refinement B)
+- [x] Numberpad toggle on "Are you ready?" screen (Plan 09-01 refinement C)
+- [x] Code review — full adversarial review; 22 findings documented (Plan 09-02)
+
+### Draft 4 — Phase 09-03 (Complete)
+- [x] C-1: ex04 difficulty setting has no effect on grading (always ±5%) — apply DIFFICULTY_CONFIG like ex01
+- [x] C-2: ex08 Q3 (break-even months) shown in UI but not counted in session score — include in allOk
+- [x] C-3: ex07 self-grade buttons allow double-submission — disable on first click
+- [x] C-4: app.js `replace('\n', '<br>')` only replaces first newline — use regex /\n/g
+- [x] R-2: Google Font loaded twice (HTML link + CSS @import) — remove @import from style.css
+- [x] W-1: No favicon — add `<link rel="icon" href="data:,">` to suppress 404
+- [x] W-2: No meta description or OG tags — add to index.html head
+- [x] S-1: Raw user input in innerHTML (XSS) — add esc() helper; wrap rawInput in all showFeedback functions
+- [x] S-2: Globals referenced by name in inline onclick — add comment in app.js
+- [x] E-1: document.onkeydown not cleaned up on navigation — clear in goHome() and startExercise()
+- [x] E-3: parseUserNumber accepts scientific notation / negative values — add isFinite/negative guard
+- [x] Testing: create tests/tests.html covering pure utility functions (T-1, T-2, T-3)
+
+### Draft 5 — Milestone 5 (Planned)
+- [ ] Supabase integration — write session scores to database; display on High Scores screen
+- [ ] User authentication — username + password login/register via Supabase Auth; scores linked to user
+- [ ] Google Form — embedded feedback form on a new Feedback tab or modal
+- [ ] Waitlist — email capture form for interested users
+
+### Draft 6 — Milestone 6 (Planned)
+- [ ] Code cleanup — deferred refactors (R-1, R-3, R-4, R-5, C-5, E-2, W-4)
+- [ ] Final code review — adversarial pass post-features; cross-browser check
+- [ ] GitHub push + Vercel deploy — live at production URL
 
 ### Out of Scope
-- Backend / database
-- User accounts / passwords
 - Mobile app — web only
 
 ## Target Users
@@ -90,13 +117,14 @@ Aspiring investors and entrepreneurs can sharpen their deal-math intuition throu
 ## Constraints
 
 ### Technical
-- Must open directly from filesystem (file:// protocol — no local server required)
+- Milestone 4 and earlier: file:// compatible (no local server required)
+- Milestone 5+: requires web hosting (Vercel); Supabase API calls need HTTPS
 - No frameworks, no build tools, no npm
-- No external API calls
 - Must work in Chrome, Firefox, Safari
 
 ### Privacy
-- No user data stored server-side — localStorage only
+- Milestone 4: no user data stored server-side — localStorage only
+- Milestone 5+: session scores and user credentials stored in Supabase (user-consented)
 
 ## Tech Stack
 
@@ -106,6 +134,8 @@ Aspiring investors and entrepreneurs can sharpen their deal-math intuition throu
 | Styling | CSS3 | Custom pixel theme, CSS variables |
 | Logic | Vanilla JavaScript (ES5/ES6) | Global namespace pattern (no modules) |
 | Font | Press Start 2P (Google Fonts CDN) | Requires internet on first load |
+| Backend (M5+) | Supabase | Score storage + user auth; requires HTTPS |
+| Hosting (M5+) | Vercel | Static deploy from GitHub |
 
 ## Success Metrics
 

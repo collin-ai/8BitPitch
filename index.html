@@ -8,6 +8,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:,">
+  <meta name="description" content="8BitPitch Lite — sharpen your startup finance mental math with 8 retro-style drills.">
+  <meta property="og:title" content="8BitPitch Lite">
+  <meta property="og:description" content="8 mental math drills for investors and entrepreneurs. Valuation, break-even, TAM, growth rates — in an 8-bit retro game.">
+  <meta property="og:type" content="website">
 </head>
 <body>
 
@@ -47,6 +52,31 @@
     <div class="drill-body">
       <div id="drill-area">
         <!-- Exercise content rendered here by exercise modules -->
+      </div>
+      <div id="numpad-panel" class="hidden">
+        <!-- Row 1: 7 8 9 , . -->
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('7')">7</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('8')">8</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('9')">9</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey(',')">&#44;</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('.')">&#46;</button>
+        <!-- Row 2: 4 5 6 K M -->
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('4')">4</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('5')">5</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('6')">6</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('K')">K</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('M')">M</button>
+        <!-- Row 3: 1 2 3 ← → -->
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('1')">1</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('2')">2</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('3')">3</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('left')">&larr;</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('right')">&rarr;</button>
+        <!-- Row 4: 0 DEL TAB ENT(wide) -->
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('0')">0</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('backspace')">DEL</button>
+        <button class="np-btn" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('tab')">TAB</button>
+        <button class="np-btn np-wide" onmousedown="return false" onclick="BitPitch.Numpad.pressKey('enter')">ENT</button>
       </div>
     </div>
   </div>
@@ -134,6 +164,7 @@
   <script src="utils/random.js"></script>
   <script src="utils/timer.js"></script>
   <script src="utils/scoring.js"></script>
+  <script src="utils/numpad.js"></script>
   <script src="exercises/ex01-percentage-snap.js"></script>
   <script src="exercises/ex02-multiples.js"></script>
   <script src="exercises/ex03-double-triple-halve.js"></script>

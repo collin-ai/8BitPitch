@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BitPitch — Tests</title>
+  <style>
+    body { font-family: monospace; background: #0a0a0a; color: #e8e8e8; padding: 24px; font-size: 13px; }
+    h1   { color: #ffe600; margin-bottom: 4px; }
+    h2   { color: #00d4ff; margin: 20px 0 6px; font-size: 13px; border-bottom: 1px solid #1e3a5f; padding-bottom: 4px; }
+    .pass { color: #39ff14; }
+    .fail { color: #ff2d55; }
+    #summary { margin-top: 24px; font-size: 14px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<h1>BitPitch — Test Harness</h1>
+<p style="color:#888;font-size:11px">Open in browser at file://. No framework. No server needed.</p>
+
+<div id="results"></div>
+<div id="summary"></div>
+
+<!-- Load utils from parent directory -->
+<script src="../utils/random.js"></script>
+<script src="../utils/scoring.js"></script>
+<script src="../utils/timer.js"></script>
+
+<script>
+// ---- Inline test harness ----
+
+var passed = 0;
+var failed = 0;
+var currentGroup = null;
+var resultsEl = document.getElementById('results');
+
+function group(label) {
+  currentGroup = document.createElement('div');
+  var h = document.createElement('h2');
+  h.textContent = label;
+  currentGroup.appendChild(h);
+  resultsEl.appendChild(currentGroup);
+}
+
+function assert(label, actual, expected) {
+  var ok;
+  if (typeof expected === 'number' && isNaN(expected)) {
+    ok = (typeof actual === 'number' && isNaN(actual));
+  } else {
+    ok = (actual === expected);
+  }
+  var line = document.createElement('div');
+  if (ok) {
+    line.className = 'pass';
+    line.textContent = 'PASS  ' + label;
+    passed++;
+  } else {
+    line.className = 'fail';
+    line.textContent = 'FAIL  ' + label + '  (got: ' + actual + ', want: ' + expected + ')';
+    failed++;
+  }
+  if (currentGroup) currentGroup.appendChild(line);
+}
+
+function assertClose(label, actual, expected, epsilon) {
+  epsilon = epsilon || 0.0001;
+  var ok = (typeof actual === 'number' && !isNaN(actual) &&
+            typeof expected === 'number' && !isNaN(expected) &&
+            Math.abs(actual - expected) <= epsilon);
+  var line = document.createElement('div');
+  if (ok) {
+    line.className = 'pass';
+    line.textContent = 'PASS  ' + label;
+    passed++;
+  } else {
+    line.className = 'fail';
+    line.textContent = 'FAIL  ' + label + '  (got: ' + actual + ', want ~' + expected + ')';
+    failed++;
+  }
+  if (currentGroup) currentGroup.appendChild(line);
+}
+
+// ---- Shortcuts ----
+var R    = window.BitPitch.random;
+var pun  = R.parseUserNumber;
+var fmt  = R.formatMoney;
+var ice  = window.BitPitch.isCloseEnough;
+var ice2 = window.BitPitch.isCloseEnough2dp;
+
+// ========================================================
+// T-1a: parseUserNumber
+// ========================================================
+group('T-1a — parseUserNumber');
+assert('$1.5M → 1500000',    pun('$1.5M'),  1500000);
+assert('500K → 500000',       pun('500K'),   500000);
+assert('1,000 → 1000',        pun('1,000'),  1000);
+assert('"" → NaN',            pun(''),       NaN);
+assert('abc → NaN',           pun('abc'),    NaN);
+assert('0 → 0',               pun('0'),      0);
+assert('1.2B → 1200000000',   pun('1.2B'),   1200000000);
+assert('-5 → NaN (E-3)',       pun('-5'),     NaN);
+assert('1e309 → NaN (E-3)',    pun('1e309'),  NaN);
+
+// ========================================================
+// T-1b: formatMoney
+// ========================================================
+group('T-1b — formatMoney');
+assert('1000000 → $1M',  fmt(1000000), '$1M');
+assert('500000 → $500K', fmt(500000),  '$500K');
+assert('1500 → $2K',     fmt(1500),    '$2K');   // Math.round(1500/1000) = 2
+assert('1499 → $1K',     fmt(1499),    '$1K');
+assert('1000000000 → $1B', fmt(1000000000), '$1B');
+assert('1500000000 → $1.5B', fmt(1500000000), '$1.5B');
+
+// ========================================================
+// T-1c: isCloseEnough
+// ========================================================
+group('T-1c — isCloseEnough');
+assert('ice(105, 100, 5) → true',  ice(105,  100, 5), true);
+assert('ice(106, 100, 5) → false', ice(106,  100, 5), false);
+assert('ice(95, 100, 5) → true',   ice(95,   100, 5), true);
+assert('ice(94, 100, 5) → false',  ice(94,   100, 5), false);
+assert('ice(0, 0, 5) → true',      ice(0,    0,   5), true);
+
+// ========================================================
+// T-2: isCloseEnough boundary (inclusive)
+// ========================================================
+group('T-2 — isCloseEnough boundary');
+assert('ice(105, 100, 5) → true (exactly 5% off)',   ice(105,    100, 5), true);
+// 105.01 is 0.0001% beyond 5% boundary
+assert('ice(105.01, 100, 5) → false (beyond)',        ice(105.01, 100, 5), false);
+
+// ========================================================
+// T-1d: isCloseEnough2dp
+// ========================================================
+group('T-1d — isCloseEnough2dp');
+assert('ice2(1.33, 1.33) → true',    ice2(1.33,  1.33),  true);
+assert('ice2(1.34, 1.33) → false',   ice2(1.34,  1.33),  false);
+assert('ice2(33.33, 33.33) → true',  ice2(33.33, 33.33), true);
+
+// ========================================================
+// T-3a: ex06 scenario sanity
+// ========================================================
+group('T-3a — ex06 scenario math');
+
+var SCENARIOS = [
+  { price: 50,  cost: 20,  fixed: 150000 },
+  { price: 100, cost: 40,  fixed: 180000 },
+  { price: 30,  cost: 10,  fixed: 200000 },
+  { price: 80,  cost: 50,  fixed: 120000 },
+  { price: 200, cost: 80,  fixed: 360000 },
+  { price: 25,  cost: 10,  fixed: 75000  },
+  { price: 60,  cost: 15,  fixed: 225000 },
+  { price: 150, cost: 100, fixed: 250000 },
+  { price: 40,  cost: 16,  fixed: 144000 },
+  { price: 120, cost: 45,  fixed: 300000 }
+];
+
+SCENARIOS.forEach(function (s, i) {
+  var profitPerUnit  = s.price - s.cost;
+  var breakEvenUnits = Math.round(s.fixed / profitPerUnit);
+
+  assert(
+    'scenario[' + i + '] profit: $' + s.price + ' - $' + s.cost + ' = ' + profitPerUnit,
+    s.price - s.cost,
+    profitPerUnit
+  );
+
+  var computed = Math.round(s.fixed / profitPerUnit);
+  assert(
+    'scenario[' + i + '] breakEven: round(' + s.fixed + '/' + profitPerUnit + ') = ' + breakEvenUnits,
+    computed,
+    breakEvenUnits
+  );
+});
+
+// ========================================================
+// T-3b: TAM category sanity
+// ========================================================
+group('T-3b — TAM category math');
+
+// Parse '150M' -> 150000000, '$200/yr' -> 200
+function parseCustomers(s) {
+  return R.parseUserNumber(s);
+}
+function parseSpend(s) {
+  // Strip /yr (and /mo if present), then parse as money
+  var clean = s.replace(/\/yr$/i, '').replace(/\/mo$/i, '').trim();
+  return R.parseUserNumber(clean);
+}
+
+R.TAM_CATEGORIES.forEach(function (cat) {
+  var c = parseCustomers(cat.customers);
+  var s = parseSpend(cat.spend);
+  var product = c * s;
+  assertClose(
+    cat.label + ': ' + cat.customers + ' × ' + cat.spend + ' = ' + R.formatMoney(cat.answer),
+    product,
+    cat.answer,
+    1  // allow ±1 for floating point
+  );
+});
+
+// ========================================================
+// Summary
+// ========================================================
+var summaryEl = document.getElementById('summary');
+summaryEl.style.color = failed === 0 ? '#39ff14' : '#ff2d55';
+summaryEl.textContent = passed + ' passed, ' + failed + ' failed';
+</script>
+
+</body>
+</html>
