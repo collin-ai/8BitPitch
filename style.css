@@ -776,7 +776,6 @@ html, body {
   background: transparent;
   color: var(--purple);
   border: 2px solid var(--purple);
-  box-shadow: 4px 4px 0 #000;
   cursor: pointer;
   letter-spacing: 1px;
 }
@@ -785,11 +784,9 @@ html, body {
   background: var(--blue);
   color: #000;
   border-color: var(--blue);
-  box-shadow: 4px 4px 0 var(--blue);
 }
 
 .numpad-toggle-btn:active {
-  box-shadow: 2px 2px 0 #000;
   transform: translate(2px, 2px);
 }
 
@@ -803,9 +800,8 @@ html, body {
   padding: 12px;
   margin-top: 0;
   background: var(--panel);
-  border: 2px solid var(--blue);
+  border: 2px solid var(--border);
   border-top: none;
-  box-shadow: 4px 4px 0 var(--blue);
 }
 
 .np-btn {
@@ -813,17 +809,22 @@ html, body {
   font-size: 9px;
   padding: 14px 0;
   background: transparent;
-  color: var(--blue);
-  border: 2px solid var(--blue);
+  color: var(--border);
+  border: 2px solid var(--border);
   cursor: pointer;
   text-align: center;
   letter-spacing: 0;
 }
 
 .np-btn:active {
-  background: var(--blue);
+  background: var(--border);
   color: #000;
 }
+
+.np-num {
+  color: var(--yellow);
+}
+
 
 .np-wide {
   grid-column: span 2;

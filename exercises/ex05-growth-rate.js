@@ -11,43 +11,24 @@ window.BitPitch.exercises['ex05'] = function (context) {
   var R     = window.BitPitch.random;
   var close = window.BitPitch.isCloseEnough;
 
-  var RATE_POOL = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-  var RATES_PER_ROUND = 3;
-
-  var ROUNDS    = 2;
-  var round     = 0;
-  var rateIdx   = 0;
-  var roundRates = [];
-  var baseRev;
+  var RATE_POOL       = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+  var TOTAL_QUESTIONS = 5;
+  var questionNum     = 0;
   var timer = new window.BitPitch.Timer();
 
-  function nextRound() {
-    if (round >= ROUNDS) { context.onSessionEnd(); return; }
-    baseRev = R.randFrom(R.NICE_REVENUES);
-    rateIdx = 0;
-    round++;
-    // Shuffle pool and pick RATES_PER_ROUND
-    var shuffled = RATE_POOL.slice();
-    for (var i = shuffled.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = tmp;
-    }
-    roundRates = shuffled.slice(0, RATES_PER_ROUND).map(function (pct) {
-      return { label: '+' + pct + '% GROWTH', rate: pct / 100 };
-    });
-    showRate();
-  }
-
   function showRate() {
-    if (rateIdx >= roundRates.length) { nextRound(); return; }
-    var r       = roundRates[rateIdx];
+    if (questionNum >= TOTAL_QUESTIONS) { context.onSessionEnd(); return; }
+    questionNum++;
+
+    var baseRev = R.randFrom(R.NICE_REVENUES);
+    var pct     = RATE_POOL[Math.floor(Math.random() * RATE_POOL.length)];
+    var r       = { label: '+' + pct + '% GROWTH', rate: pct / 100 };
     var correct = baseRev * (1 + r.rate);
 
     context.container.innerHTML =
       '<div class="drill-card">' +
         '<div class="progress-row">' +
-          '<div class="drill-progress">ROUND <span class="current">' + round + '</span> / ' + ROUNDS +
-            ' &nbsp;|&nbsp; RATE <span class="current">' + (rateIdx + 1) + '</span> / ' + RATES_PER_ROUND + '</div>' +
+          '<div class="drill-progress">Q <span class="current">' + questionNum + '</span> / ' + TOTAL_QUESTIONS + '</div>' +
           '<span class="drill-timer-q" id="drill-timer-q"></span>' +
         '</div>' +
         '<div class="drill-question">' +
@@ -156,7 +137,6 @@ window.BitPitch.exercises['ex05'] = function (context) {
     document.getElementById('next-btn').onclick = function () {
       document.onkeydown = null;
       timer.reset();
-      rateIdx++;
       showRate();
     };
 
@@ -165,5 +145,5 @@ window.BitPitch.exercises['ex05'] = function (context) {
     };
   }
 
-  nextRound();
+  showRate();
 };

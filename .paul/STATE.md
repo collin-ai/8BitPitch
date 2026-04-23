@@ -3,9 +3,9 @@
 ## Current Position
 
 Milestone: Inter-milestone polish (pre-Milestone 5)
-Phase: 09-04 — Mobile + ex02 polish — **COMPLETE**
+Phase: 09-05 — Numpad polish + ex05 restructure — **COMPLETE**
 Status: PLAN ✓ — APPLY ✓ — UNIFY ✓
-Last activity: 2026-04-23 — Mobile viewport fixes; ex02 UI trim; paused for numpad work
+Last activity: 2026-04-23 — Numpad styling overhaul; ex05 flattened to 5 independent questions
 
 ## Loop Position
 
@@ -17,6 +17,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
   ✓        ✓        ✓     [Phase 09-02 — code review — complete]
   ✓        ✓        ✓     [Phase 09-03 — bug fixes + testing — complete]
   ✓        ✓        ✓     [Phase 09-04 — mobile + ex02 polish — complete]
+  ✓        ✓        ✓     [Phase 09-05 — numpad polish + ex05 restructure — complete]
 ```
 
 ## Key Decisions
@@ -102,27 +103,27 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | 09-01 | Mobile Numberpad | DONE |
 | 09-02 | Code Review | DONE |
 | 09-03 | Bug Fixes + Testing | DONE |
+| 09-04 | Mobile + ex02 Polish | DONE |
+| 09-05 | Numpad Polish + ex05 Restructure | DONE |
 
 ## Session Continuity
 
-Last session: 2026-04-22
-Stopped at: Milestone 4 git push complete — paused before Milestone 5
-Next action: Begin Milestone 5 — Phase 10 (Supabase Score Tracking); update git remote URL first
-Resume file: `.paul/HANDOFF-2026-04-22-19-21-21.md`
+Last session: 2026-04-23
+Stopped at: Phase 09-05 complete — numpad polish + ex05 restructure — pushed to GitHub
+Next action: Begin Milestone 5 — Phase 10 (Supabase Score Tracking)
+Resume file: `.paul/HANDOFF-2026-04-23b.md`
 Resume context:
-- Milestone 4 COMPLETE and pushed to GitHub (commit eacdf62, 29 files)
-- GitHub repo moved to https://github.com/collin-ai/8BitPitch.git — update remote before next push
-- tests/tests.html created and passing — covers parseUserNumber, formatMoney, isCloseEnough, isCloseEnough2dp, ex06 scenarios, TAM categories
+- Numpad: shadows removed from toggle + panel; borders → var(--border); digit buttons yellow; icons var(--border); ◀▶ triangle arrows; DEL↔0 swapped
+- ex05: flattened to 5 independent questions (no rounds); each picks fresh revenue + rate; progress shows Q X / 5
+- Git remote is https://github.com/collin-ai/BitPitchLiteV1.git (correct — STATE.md note about 8BitPitch.git was stale)
 - Milestone 5 planned: Supabase scores, username/password auth, Google Form feedback, waitlist
-- Milestone 6 planned: code review, cleanup, GitHub push + Vercel deploy
 - Deferred items (C-5, R-1, R-3, R-4, R-5, E-2, W-4, T-4) remain for Milestone 6
 
 ## How to Resume (fresh context)
 
-1. Read `.paul/HANDOFF-2026-04-22-19-21-21.md` for full session context
+1. Read `.paul/HANDOFF-2026-04-23b.md` for full session context
 2. Read this STATE.md for decisions and plan history
-3. Update git remote: `git remote set-url origin https://github.com/collin-ai/8BitPitch.git`
-4. Confirm Supabase account status with user, then run `/paul:plan` for Phase 10
+3. Confirm Supabase account status with user, then run `/paul:plan` for Phase 10
 
 ## Tooling Setup
 
