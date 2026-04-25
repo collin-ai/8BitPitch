@@ -3,9 +3,9 @@
 ## Current Position
 
 Milestone: Inter-milestone polish (pre-Milestone 5)
-Phase: 09-06 — Scoring overhaul + EXACT ANSWER + ex03 restructure — **COMPLETE**
+Phase: Ad-hoc — Difficulty Explained page legibility overhaul — **COMPLETE**
 Status: PLAN ✓ — APPLY ✓ — UNIFY ✓
-Last activity: 2026-04-25 — Easy tolerance → ±10%; EXACT ANSWER in all feedback boxes; ex03 flattened to 5 questions
+Last activity: 2026-04-25 — Difficulty Explained page redesigned: toggle table, font/colour fixes, mobile fit
 
 ## Loop Position
 
@@ -19,6 +19,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
   ✓        ✓        ✓     [Phase 09-04 — mobile + ex02 polish — complete]
   ✓        ✓        ✓     [Phase 09-05 — numpad polish + ex05 restructure — complete]
   ✓        ✓        ✓     [Phase 09-06 — scoring overhaul + EXACT ANSWER + ex03 restructure — complete]
+  ✓        ✓        ✓     [Ad-hoc — Difficulty Explained page legibility overhaul — complete]
 ```
 
 ## Key Decisions
@@ -112,16 +113,16 @@ PLAN ──▶ APPLY ──▶ UNIFY
 ## Session Continuity
 
 Last session: 2026-04-25
-Stopped at: Phase 09-06 complete — scoring overhaul + EXACT ANSWER + ex03 restructure — pushed to GitHub
+Stopped at: Ad-hoc Difficulty Explained overhaul complete — pushed to GitHub
 Next action: Begin Milestone 5 — Phase 10 (Supabase Score Tracking)
-Resume file: `.paul/HANDOFF-2026-04-25.md`
+Resume file: `.paul/HANDOFF-2026-04-25b.md`
 Resume context:
 - EASY tolerance changed from ±25% to ±10% across all exercises; `general` field added to DIFFICULTY_CONFIG
 - EXACT ANSWER line added above ACCEPTABLE in all feedback boxes (all exercises except ex07)
 - ex03 flattened to 5 independent questions; fresh base number + random op each time; progress Q X / 5
 - ex03 Your Answer now shows raw input string (not formatted)
-- Difficulty Explained page updated: ±25% → ±10%, example table recalculated
-- Git remote: https://github.com/collin-ai/8BitPitch.git (updated last session)
+- Difficulty Explained page fully redesigned (see ad-hoc session notes)
+- Git remote: https://github.com/collin-ai/8BitPitch.git
 - Milestone 5 planned: Supabase scores, username/password auth, Google Form feedback, waitlist
 - Deferred items (C-5, R-1, R-3, R-4, R-5, E-2, W-4, T-4) remain for Milestone 6
 

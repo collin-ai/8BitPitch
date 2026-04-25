@@ -106,8 +106,7 @@
 
     <div class="diff-exp-body">
       <p class="diff-exp-intro">
-        EACH DRILL HAS THREE DIFFICULTY LEVELS.<br>
-        HIGHER DIFFICULTY = TIGHTER TOLERANCE.
+        EACH DRILL HAS THREE DIFFICULTY LEVELS. HIGHER DIFFICULTY = TIGHTER TOLERANCE. SELECT EASY, MED, OR HARD BELOW FOR EXAMPLES.
       </p>
 
       <div class="diff-exp-section-label">EXAMPLE: DIVIDE BY 3 (33%)</div>
@@ -116,30 +115,40 @@
         <table class="diff-exp-table">
           <thead>
             <tr>
-              <th>VALUE</th>
-              <th class="col-easy">EASY<br><span class="col-tol">±10%</span></th>
-              <th class="col-med">MEDIUM<br><span class="col-tol">±5%</span></th>
-              <th class="col-hard">HARD<br><span class="col-tol">2dp</span></th>
+              <th class="col-val-head">VALUE</th>
+              <th class="col-example-head">
+                <div class="diff-toggle">
+                  <button class="diff-tab active" data-diff="easy" onclick="setDiffTab(this)">EASY<br><span class="col-tol">±10%</span></button>
+                  <button class="diff-tab" data-diff="med" onclick="setDiffTab(this)">MED<br><span class="col-tol">±5%</span></button>
+                  <button class="diff-tab" data-diff="hard" onclick="setDiffTab(this)">HARD<br><span class="col-tol">2dp</span></button>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="col-val">4,000<br><span class="col-exact">= 1,333.33</span></td>
-              <td class="col-easy">~1,200–1,467<br>acceptable</td>
-              <td class="col-med">~1,267–1,400<br>acceptable</td>
-              <td class="col-hard">1,333.33<br>required</td>
+              <td class="col-val">4k ÷ 3</td>
+              <td class="col-example">
+                <span class="ex-easy col-easy">~1,200–1,467<br><span class="ex-label">acceptable</span></span>
+                <span class="ex-med col-med hidden">~1,267–1,400<br><span class="ex-label">acceptable</span></span>
+                <span class="ex-hard col-hard hidden">1,333.33<br><span class="ex-label">required</span></span>
+              </td>
             </tr>
             <tr>
-              <td class="col-val">800<br><span class="col-exact">= 266.67</span></td>
-              <td class="col-easy">~240–293<br>acceptable</td>
-              <td class="col-med">~253–280<br>acceptable</td>
-              <td class="col-hard">266.67<br>required</td>
+              <td class="col-val">800 ÷ 3</td>
+              <td class="col-example">
+                <span class="ex-easy col-easy">~240–293<br><span class="ex-label">acceptable</span></span>
+                <span class="ex-med col-med hidden">~253–280<br><span class="ex-label">acceptable</span></span>
+                <span class="ex-hard col-hard hidden">266.67<br><span class="ex-label">required</span></span>
+              </td>
             </tr>
             <tr>
-              <td class="col-val">25,000<br><span class="col-exact">= 8,333.33</span></td>
-              <td class="col-easy">~7,500–9,167<br>acceptable</td>
-              <td class="col-med">~7,917–8,750<br>acceptable</td>
-              <td class="col-hard">8,333.33<br>required</td>
+              <td class="col-val">25k ÷ 3</td>
+              <td class="col-example">
+                <span class="ex-easy col-easy">~7,500–9,167<br><span class="ex-label">acceptable</span></span>
+                <span class="ex-med col-med hidden">~7,917–8,750<br><span class="ex-label">acceptable</span></span>
+                <span class="ex-hard col-hard hidden">8,333.33<br><span class="ex-label">required</span></span>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -148,7 +157,7 @@
       <div class="diff-exp-section-label">2 DECIMAL PLACE RULE ON HARD</div>
 
       <p class="diff-exp-note">
-        ON HARD, DIVIDE-BY-3 ANSWERS REQUIRE THE FULL DECIMAL — TYPE THE COMPLETE NUMBER (E.G. "3333333.33"). SHORTCUTS LIKE "$3.33M" PARSE TO $3,330,000 AND WON'T MATCH THE 2DP REQUIREMENT.
+        ON HARD, DIVIDE-BY-3 ANSWERS REQUIRE 2 DECIMALS OF PRECISION ENDING IN .33 OR .67. TYPE THE COMPLETE NUMBER (E.G. "3333333.33"). SHORTCUTS LIKE "$3.33M" PARSE TO $3,330,000 AND WON'T MATCH THE 2DP REQUIREMENT.
       </p>
 
       <div class="diff-exp-section-label">SETTING YOUR DIFFICULTY</div>
@@ -185,6 +194,16 @@
   </div>
 
   <script src="app.js"></script>
+
+  <script>
+    function setDiffTab(btn) {
+      var diff = btn.getAttribute('data-diff');
+      document.querySelectorAll('.diff-tab').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.querySelectorAll('.ex-easy, .ex-med, .ex-hard').forEach(function(el) { el.classList.add('hidden'); });
+      document.querySelectorAll('.ex-' + diff).forEach(function(el) { el.classList.remove('hidden'); });
+    }
+  </script>
 
 </body>
 </html>

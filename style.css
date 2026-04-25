@@ -647,7 +647,7 @@ html, body {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 9px;
+  font-size: 11px;
   color: var(--yellow);
   letter-spacing: 1px;
   white-space: nowrap;
@@ -662,14 +662,17 @@ html, body {
 }
 
 .diff-exp-intro {
-  font-size: 7px;
-  color: var(--text-dim);
-  line-height: 2.4;
+  font-size: 10px;
+  color: var(--text);
+  line-height: 2.2;
   letter-spacing: 0.5px;
+  background: #0d1520;
+  padding: 10px 14px;
+  border: 2px solid var(--border);
 }
 
 .diff-exp-section-label {
-  font-size: 8px;
+  font-size: 11px;
   color: var(--blue);
   letter-spacing: 1px;
   border-bottom: 1px solid var(--border);
@@ -683,16 +686,16 @@ html, body {
 .diff-exp-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 7px;
-  line-height: 2;
+  font-size: 10px;
+  line-height: 1.8;
 }
 
 .diff-exp-table th,
 .diff-exp-table td {
   border: 2px solid var(--border);
-  padding: 8px 10px;
+  padding: 10px 14px;
   text-align: center;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .diff-exp-table thead th {
@@ -707,27 +710,75 @@ html, body {
 .diff-exp-table .col-val {
   color: var(--text);
   text-align: left;
-}
-
-.col-exact {
-  color: var(--text-dim);
-  font-size: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  width: 1%;
 }
 
 .col-tol {
-  color: var(--text-dim);
-  font-size: 6px;
+  color: var(--text);
+  font-size: 9px;
 }
+
+.col-val-head {
+  color: var(--text);
+  white-space: nowrap;
+  width: 1%;
+}
+
+.col-example-head {
+  width: auto;
+}
+
+.col-example {
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.ex-label {
+  font-size: 9px;
+  color: var(--text);
+  display: block;
+}
+
+/* Difficulty toggle tabs in table header */
+.diff-toggle {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.diff-tab {
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  padding: 4px 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  line-height: 1.6;
+  transition: color 0.1s;
+}
+
+.diff-tab[data-diff="easy"].active  { color: var(--green); }
+.diff-tab[data-diff="med"].active   { color: var(--yellow); }
+.diff-tab[data-diff="hard"].active  { color: var(--red); }
 
 .diff-exp-table .col-easy { color: var(--green); }
 .diff-exp-table .col-med  { color: var(--yellow); }
 .diff-exp-table .col-hard { color: var(--red); }
 
 .diff-exp-note {
-  font-size: 7px;
-  color: var(--text-dim);
-  line-height: 2.4;
+  font-size: 10px;
+  color: var(--text);
+  line-height: 2.2;
   letter-spacing: 0.5px;
+  background: #0d1520;
+  padding: 10px 14px;
+  border: 2px solid var(--border);
 }
 
 /* ---------- Restart modal ---------- */
