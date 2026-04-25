@@ -21,39 +21,22 @@ window.BitPitch.exercises['ex03'] = function (context) {
     { label: '1%',       fn: function (n) { return n * 0.01; },  symbol: '× 1%' }
   ];
 
-  var OPS_PER_ROUND = 3;
-  var ROUNDS    = 2;
-  var round     = 0;
-  var opIdx     = 0;
-  var roundOps  = [];
-  var baseNum;
-  var timer     = new window.BitPitch.Timer();
-
-  function nextRound() {
-    if (round >= ROUNDS) { context.onSessionEnd(); return; }
-    baseNum  = R.randFrom(R.NICE_BASE_NUMBERS);
-    opIdx    = 0;
-    round++;
-    // Shuffle a copy of OPERATIONS and take the first OPS_PER_ROUND
-    var shuffled = OPERATIONS.slice();
-    for (var i = shuffled.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = tmp;
-    }
-    roundOps = shuffled.slice(0, OPS_PER_ROUND);
-    showOp();
-  }
+  var TOTAL_QUESTIONS = 5;
+  var questionNum     = 0;
+  var timer           = new window.BitPitch.Timer();
 
   function showOp() {
-    if (opIdx >= roundOps.length) { nextRound(); return; }
-    var op      = roundOps[opIdx];
+    if (questionNum >= TOTAL_QUESTIONS) { context.onSessionEnd(); return; }
+    questionNum++;
+
+    var baseNum = R.randFrom(R.NICE_BASE_NUMBERS);
+    var op      = OPERATIONS[Math.floor(Math.random() * OPERATIONS.length)];
     var correct = op.fn(baseNum);
 
     context.container.innerHTML =
       '<div class="drill-card">' +
         '<div class="progress-row">' +
-          '<div class="drill-progress">ROUND <span class="current">' + round + '</span> / ' + ROUNDS +
-            ' &nbsp;|&nbsp; OP <span class="current">' + (opIdx + 1) + '</span> / ' + OPS_PER_ROUND + '</div>' +
+          '<div class="drill-progress">Q <span class="current">' + questionNum + '</span> / ' + TOTAL_QUESTIONS + '</div>' +
           '<span class="drill-timer-q" id="drill-timer-q"></span>' +
         '</div>' +
         '<div class="drill-question">' +
@@ -82,12 +65,12 @@ window.BitPitch.exercises['ex03'] = function (context) {
       clearInterval(timerInterval);
       var elapsed = timer.stop();
       var userVal = R.parseUserNumber(rawInput);
-      var cfg     = (DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { pct33: 5, quarter: 2, growth: 5 };
+      var cfg     = (DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { pct33: 10, quarter: 10, general: 10 };
       var isOk;
       if (op.label === '33%' && context.difficulty === 'HARD') {
         isOk = window.BitPitch.isCloseEnough2dp(userVal, correct);
       } else {
-        var tol = op.label === '33%' ? cfg.pct33 : op.label === 'QUARTER' ? cfg.quarter : 2;
+        var tol = op.label === '33%' ? cfg.pct33 : op.label === 'QUARTER' ? cfg.quarter : cfg.general;
         isOk = close(userVal, correct, tol);
       }
 
@@ -129,18 +112,22 @@ window.BitPitch.exercises['ex03'] = function (context) {
     var feedbackClass = isOk ? 'feedback-correct' : 'feedback-wrong';
     var feedbackMsg   = isOk ? 'CORRECT!' : 'WRONG';
 
+    // Exact answer (always Hard rules: 2dp for 33%, integer for all else)
+    var exactCorrect = (opLabel === '33%') ? R.formatNumberDp(correct, 2) : R.formatNumber(Math.round(correct));
+    var exactLine = 'EXACT ANSWER: ' + exactCorrect;
+
     var dp = (opLabel === '33%' && context.difficulty === 'HARD') ? 2 : 0;
     var displayCorrect = R.formatNumberDp(correct, dp);
 
     // Acceptable range
-    var cfg = (DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { pct33: 5, quarter: 2 };
+    var cfg = (DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { pct33: 10, quarter: 10, general: 10 };
     var tol;
     if (opLabel === '33%') {
       tol = context.difficulty === 'HARD' ? null : cfg.pct33;
     } else if (opLabel === 'QUARTER') {
-      tol = context.difficulty === 'HARD' ? 0 : cfg.quarter;
+      tol = cfg.quarter;
     } else {
-      tol = 2;
+      tol = cfg.general;
     }
     var acceptableLine;
     if (tol === null) {
@@ -157,15 +144,14 @@ window.BitPitch.exercises['ex03'] = function (context) {
     var yourAnswer;
     if (isPassed || rawInput === null || rawInput === '') {
       yourAnswer = 'PASS';
-    } else if (isOk) {
-      yourAnswer = esc(rawInput);
     } else {
-      yourAnswer = userVal !== null ? R.formatNumber(Math.round(userVal)) : '?';
+      yourAnswer = esc(rawInput);
     }
 
     context.container.innerHTML +=
       '<div class="feedback-box ' + feedbackClass + '">' +
         feedbackMsg + '<br><br>' +
+        exactLine + '<br>' +
         acceptableLine + '<br>' +
         '<span class="text-dim" style="font-size:8px">' + opLabel + ' of ' + base.toLocaleString() + ' = ' + displayCorrect + '</span><br>' +
         'YOUR ANSWER: <span class="text-dim">' + yourAnswer + '</span>' +
@@ -176,7 +162,6 @@ window.BitPitch.exercises['ex03'] = function (context) {
     document.getElementById('next-btn').onclick = function () {
       document.onkeydown = null;
       timer.reset();
-      opIdx++;
       showOp();
     };
 
@@ -185,5 +170,5 @@ window.BitPitch.exercises['ex03'] = function (context) {
     };
   }
 
-  nextRound();
+  showOp();
 };

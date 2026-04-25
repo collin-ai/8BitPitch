@@ -26,10 +26,11 @@ var AppState = {
 };
 
 // Difficulty tolerance config — tolerances (%) per operation type per difficulty
+// general: used for standard calculations (valuation, ask, equity, growth rates, double/triple/halve, etc.)
 var DIFFICULTY_CONFIG = {
-  EASY:   { pct33: 25, quarter: 5,  growth: 5  },
-  MEDIUM: { pct33: 5,  quarter: 2,  growth: 5  },
-  HARD:   { pct33: 0,  quarter: 0,  growth: 0  }
+  EASY:   { pct33: 10, quarter: 10, growth: 10, general: 10 },
+  MEDIUM: { pct33: 5,  quarter: 2,  growth: 5,  general: 5  },
+  HARD:   { pct33: 0,  quarter: 0,  growth: 0,  general: 0  }
 };
 
 // Exercise definitions — what shows on the home screen buttons

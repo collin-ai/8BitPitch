@@ -3,9 +3,9 @@
 ## Current Position
 
 Milestone: Inter-milestone polish (pre-Milestone 5)
-Phase: 09-05 — Numpad polish + ex05 restructure — **COMPLETE**
+Phase: 09-06 — Scoring overhaul + EXACT ANSWER + ex03 restructure — **COMPLETE**
 Status: PLAN ✓ — APPLY ✓ — UNIFY ✓
-Last activity: 2026-04-23 — Numpad styling overhaul; ex05 flattened to 5 independent questions
+Last activity: 2026-04-25 — Easy tolerance → ±10%; EXACT ANSWER in all feedback boxes; ex03 flattened to 5 questions
 
 ## Loop Position
 
@@ -18,6 +18,7 @@ PLAN ──▶ APPLY ──▶ UNIFY
   ✓        ✓        ✓     [Phase 09-03 — bug fixes + testing — complete]
   ✓        ✓        ✓     [Phase 09-04 — mobile + ex02 polish — complete]
   ✓        ✓        ✓     [Phase 09-05 — numpad polish + ex05 restructure — complete]
+  ✓        ✓        ✓     [Phase 09-06 — scoring overhaul + EXACT ANSWER + ex03 restructure — complete]
 ```
 
 ## Key Decisions
@@ -34,9 +35,10 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | App title: "BitPitch Lite — Valuation Mental Math Trainer" | User confirmed |
 | ex04: "VALUE EQUITY ASK TRIANGLE" | Shark Tank trademark removed; user confirmed 05-04 |
 | Difficulty: Easy/Medium/Hard (default Easy) | User confirmed |
-| Tolerances: EASY pct33=25%, MEDIUM pct33=5% | ROADMAP table; confirmed 05-05 |
-| Tolerances: EASY quarter=5%, MEDIUM=2%, HARD=0% | ROADMAP table; confirmed 05-05 |
-| Tolerances: EASY/MEDIUM growth=5%, HARD=0% | ROADMAP table; confirmed 05-05 |
+| Tolerances: EASY all=10%, MEDIUM pct33=5%/quarter=2%/general=5%, HARD=0% | Updated 09-06; EASY was ±25% |
+| DIFFICULTY_CONFIG `general` field for standard ops (valuation, equity, growth, DTH) | Added 09-06 |
+| EXACT ANSWER shown in all feedback boxes regardless of difficulty | User confirmed 2026-04-25 |
+| Exact answer uses Hard scoring rules (2dp for ÷3, rounded otherwise) | User confirmed 2026-04-25 |
 | Hard pct33: 2dp precision required (not integer exact) | User confirmed 06-05 session |
 | 33% operations use ÷ 3 (not × 0.33) | True thirds; enables 2dp Hard scoring; user confirmed 06-05 |
 | randTriangle: equity=33 uses valuation/3 for ask | Consistent with ÷3 rule |
@@ -105,23 +107,27 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | 09-03 | Bug Fixes + Testing | DONE |
 | 09-04 | Mobile + ex02 Polish | DONE |
 | 09-05 | Numpad Polish + ex05 Restructure | DONE |
+| 09-06 | Scoring Overhaul + EXACT ANSWER + ex03 Restructure | DONE |
 
 ## Session Continuity
 
-Last session: 2026-04-23
-Stopped at: Phase 09-05 complete — numpad polish + ex05 restructure — pushed to GitHub
+Last session: 2026-04-25
+Stopped at: Phase 09-06 complete — scoring overhaul + EXACT ANSWER + ex03 restructure — pushed to GitHub
 Next action: Begin Milestone 5 — Phase 10 (Supabase Score Tracking)
-Resume file: `.paul/HANDOFF-2026-04-23b.md`
+Resume file: `.paul/HANDOFF-2026-04-25.md`
 Resume context:
-- Numpad: shadows removed from toggle + panel; borders → var(--border); digit buttons yellow; icons var(--border); ◀▶ triangle arrows; DEL↔0 swapped
-- ex05: flattened to 5 independent questions (no rounds); each picks fresh revenue + rate; progress shows Q X / 5
-- Git remote is https://github.com/collin-ai/BitPitchLiteV1.git (correct — STATE.md note about 8BitPitch.git was stale)
+- EASY tolerance changed from ±25% to ±10% across all exercises; `general` field added to DIFFICULTY_CONFIG
+- EXACT ANSWER line added above ACCEPTABLE in all feedback boxes (all exercises except ex07)
+- ex03 flattened to 5 independent questions; fresh base number + random op each time; progress Q X / 5
+- ex03 Your Answer now shows raw input string (not formatted)
+- Difficulty Explained page updated: ±25% → ±10%, example table recalculated
+- Git remote: https://github.com/collin-ai/8BitPitch.git (updated last session)
 - Milestone 5 planned: Supabase scores, username/password auth, Google Form feedback, waitlist
 - Deferred items (C-5, R-1, R-3, R-4, R-5, E-2, W-4, T-4) remain for Milestone 6
 
 ## How to Resume (fresh context)
 
-1. Read `.paul/HANDOFF-2026-04-23b.md` for full session context
+1. Read `.paul/HANDOFF-2026-04-25.md` for full session context
 2. Read this STATE.md for decisions and plan history
 3. Confirm Supabase account status with user, then run `/paul:plan` for Phase 10
 

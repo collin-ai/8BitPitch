@@ -175,10 +175,14 @@ window.BitPitch.exercises['ex08'] = function (context) {
     var cls = overallOk ? 'feedback-correct' : 'feedback-wrong';
     var msg = overallOk ? 'SHARP INVESTOR!' : (gaveUp ? 'GAVE UP' : 'KEEP TRAINING');
 
-    // Acceptable ranges
+    // Exact answers
     var v = pitch.tri.valuation;
     var m = pitch.multiple;
     var b = pitch.breakEvenOnAsk;
+    var exactLine =
+      'EXACT: Q1 ' + R.formatMoney(v) + ' / Q2 ' + m + '\u00d7 / Q3 ' + b + ' months';
+
+    // Acceptable ranges
     var acceptableLine =
       'Q1 VALUATION: ' + R.formatMoney(v * 0.90) + ' \u2013 ' + R.formatMoney(v * 1.10) + ' <span class="text-dim" style="font-size:7px">(\u00b110%)</span><br>' +
       'Q2 MULTIPLE: ' + (m * 0.80).toFixed(1) + '\u00d7 \u2013 ' + (m * 1.20).toFixed(1) + '\u00d7 <span class="text-dim" style="font-size:7px">(\u00b120%)</span><br>' +
@@ -197,6 +201,7 @@ window.BitPitch.exercises['ex08'] = function (context) {
     context.container.innerHTML +=
       '<div class="feedback-box ' + cls + '">' +
         msg + '<br><br>' +
+        exactLine + '<br>' +
         acceptableLine + '<br>' +
         '<span class="text-dim" style="font-size:7px">' +
           'Monthly profit ~' + R.formatMoney(pitch.monthlyProfit) + '/mo' +

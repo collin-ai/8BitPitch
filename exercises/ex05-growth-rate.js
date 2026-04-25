@@ -103,8 +103,11 @@ window.BitPitch.exercises['ex05'] = function (context) {
     var cls = isOk ? 'feedback-correct' : 'feedback-wrong';
     var msg = isOk ? 'CORRECT!' : 'WRONG';
 
+    // Exact answer (full precision, no rounding shortcut)
+    var exactLine = 'EXACT ANSWER: ' + R.formatMoney(correct);
+
     // Acceptable range (difficulty-based growth tolerance)
-    var tol = ((DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { growth: 5 }).growth;
+    var tol = ((DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { growth: 10 }).growth;
     var acceptableLine;
     if (tol === 0) {
       acceptableLine = 'ACCEPTABLE: ' + R.formatMoney(Math.round(correct)) + ' <span class="text-dim" style="font-size:8px">(HARD exact)</span>';
@@ -127,6 +130,7 @@ window.BitPitch.exercises['ex05'] = function (context) {
     context.container.innerHTML +=
       '<div class="feedback-box ' + cls + '">' +
         msg + '<br><br>' +
+        exactLine + '<br>' +
         acceptableLine + '<br>' +
         '<span class="text-dim" style="font-size:8px">' + R.formatMoney(base) + ' ' + rateLabel + ' = ' + R.formatMoney(Math.round(correct)) + '</span><br>' +
         'YOUR ANSWER: <span class="text-dim">' + yourAnswer + '</span>' +

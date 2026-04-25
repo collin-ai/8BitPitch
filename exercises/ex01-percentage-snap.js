@@ -93,16 +93,16 @@ window.BitPitch.exercises['ex01'] = function (context) {
       clearInterval(iv);
       var elapsed = timer.stop();
       var rawVal  = R.parseUserNumber(rawInput);
+      var cfg     = (DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { pct33: 10, general: 10 };
       var isOk;
       if (type === 'ask' && tri.equity === 33) {
-        var cfg = (DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { pct33: 5 };
         if (context.difficulty === 'HARD') {
           isOk = window.BitPitch.isCloseEnough2dp(rawVal, correctAnswer);
         } else {
           isOk = close(rawVal, correctAnswer, cfg.pct33);
         }
       } else {
-        isOk = close(rawVal, correctAnswer, 5);
+        isOk = close(rawVal, correctAnswer, context.difficulty === 'HARD' ? 0 : cfg.general);
       }
 
       var sb = document.getElementById('submit-btn');
@@ -135,10 +135,22 @@ window.BitPitch.exercises['ex01'] = function (context) {
     var displayCorrect = (type === 'equity') ? correct + '%' :
                          dp > 0 ? R.formatMoneyDp(correct, dp) : R.formatMoney(correct);
 
+    // Exact answer (always Hard rules: 2dp for 33% ask, otherwise rounded)
+    var exactCorrect;
+    if (type === 'equity') {
+      exactCorrect = correct + '%';
+    } else if (type === 'ask' && tri.equity === 33) {
+      exactCorrect = R.formatMoneyDp(correct, 2);
+    } else {
+      exactCorrect = R.formatMoney(Math.round(correct));
+    }
+    var exactLine = 'EXACT ANSWER: ' + exactCorrect;
+
     // Acceptable range
+    var cfg = (DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { pct33: 10, general: 10 };
     var tol = (type === 'ask' && tri.equity === 33)
-      ? (context.difficulty === 'HARD' ? null : ((DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { pct33: 5 }).pct33)
-      : 5;
+      ? (context.difficulty === 'HARD' ? null : cfg.pct33)
+      : (context.difficulty === 'HARD' ? 0 : cfg.general);
     var acceptableLine;
     if (tol === null) {
       acceptableLine = 'ACCEPTABLE: ' + displayCorrect + ' <span class="text-dim" style="font-size:8px">(HARD exact)</span>';
@@ -164,6 +176,7 @@ window.BitPitch.exercises['ex01'] = function (context) {
     context.container.innerHTML +=
       '<div class="feedback-box ' + cls + '">' +
         msg + '<br><br>' +
+        exactLine + '<br>' +
         acceptableLine + '<br>' +
         '<span class="text-dim" style="font-size:8px">Ask: ' + R.formatMoney(tri.ask) +
         '&nbsp; Equity: ' + tri.equity + '%&nbsp; Valuation: ' + R.formatMoney(tri.valuation) + '</span><br>' +

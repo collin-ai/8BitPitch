@@ -96,15 +96,15 @@ window.BitPitch.exercises['ex04'] = function (context) {
       var elapsed = timer.stop();
       var userVal = R.parseUserNumber(rawInput);
       var isOk;
+      var cfg = (DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { pct33: 10, general: 10 };
       if (type === 'ask' && tri.equity === 33) {
-        var cfg = (DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { pct33: 5 };
         if (context.difficulty === 'HARD') {
           isOk = window.BitPitch.isCloseEnough2dp(userVal, correctAnswer);
         } else {
           isOk = close(userVal, correctAnswer, cfg.pct33);
         }
       } else {
-        isOk = close(userVal, correctAnswer, 5);
+        isOk = close(userVal, correctAnswer, context.difficulty === 'HARD' ? 0 : cfg.general);
       }
 
       var sb = document.getElementById('submit-btn');
@@ -141,12 +141,33 @@ window.BitPitch.exercises['ex04'] = function (context) {
     var msg = isOk ? 'CORRECT!' : 'WRONG';
     var displayCorrect = type === 'equity' ? correct + '%' : R.formatMoney(correct);
 
-    // Acceptable range (always ±5%)
-    var lo = correct * 0.95;
-    var hi = correct * 1.05;
-    var loFmt = (type === 'equity') ? Math.round(lo) + '%' : R.formatMoney(lo);
-    var hiFmt = (type === 'equity') ? Math.round(hi) + '%' : R.formatMoney(hi);
-    var acceptableLine = 'ACCEPTABLE: ' + loFmt + ' \u2013 ' + hiFmt + ' <span class="text-dim" style="font-size:8px">(\u00b15%)</span>';
+    // Exact answer (always Hard rules: 2dp for 33% ask, otherwise rounded)
+    var exactCorrect;
+    if (type === 'equity') {
+      exactCorrect = correct + '%';
+    } else if (type === 'ask' && tri.equity === 33) {
+      exactCorrect = R.formatMoneyDp(correct, 2);
+    } else {
+      exactCorrect = R.formatMoney(Math.round(correct));
+    }
+    var exactLine = 'EXACT ANSWER: ' + exactCorrect;
+
+    // Acceptable range
+    var cfg = (DIFFICULTY_CONFIG && DIFFICULTY_CONFIG[context.difficulty]) || { pct33: 10, general: 10 };
+    var tol = (type === 'ask' && tri.equity === 33)
+      ? (context.difficulty === 'HARD' ? null : cfg.pct33)
+      : (context.difficulty === 'HARD' ? 0 : cfg.general);
+    var acceptableLine;
+    if (tol === null || tol === 0) {
+      var displayCorrect = type === 'equity' ? correct + '%' : R.formatMoney(correct);
+      acceptableLine = 'ACCEPTABLE: ' + displayCorrect + ' <span class="text-dim" style="font-size:8px">(HARD exact)</span>';
+    } else {
+      var lo = correct * (1 - tol / 100);
+      var hi = correct * (1 + tol / 100);
+      var loFmt = (type === 'equity') ? Math.round(lo) + '%' : R.formatMoney(lo);
+      var hiFmt = (type === 'equity') ? Math.round(hi) + '%' : R.formatMoney(hi);
+      acceptableLine = 'ACCEPTABLE: ' + loFmt + ' \u2013 ' + hiFmt + ' <span class="text-dim" style="font-size:8px">(' + context.difficulty + ' \u00b1' + tol + '%)</span>';
+    }
 
     // Your answer
     var yourAnswer;
@@ -162,6 +183,7 @@ window.BitPitch.exercises['ex04'] = function (context) {
     context.container.innerHTML +=
       '<div class="feedback-box ' + cls + '">' +
         msg + '<br><br>' +
+        exactLine + '<br>' +
         acceptableLine + '<br>' +
         '<span class="text-dim" style="font-size:8px">Ask: ' + R.formatMoney(tri.ask) +
         '&nbsp; Equity: ' + tri.equity + '%&nbsp; Valuation: ' + R.formatMoney(tri.valuation) + '</span><br>' +

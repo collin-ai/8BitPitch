@@ -156,6 +156,7 @@ window.BitPitch.exercises['ex02'] = function (context) {
     context.container.innerHTML +=
       '<div class="feedback-box ' + cls + '">' +
         msg + '<br><br>' +
+        'EXACT RANGE: ' + R.formatMoney(minVal) + ' \u2013 ' + R.formatMoney(maxVal) + '<br>' +
         'ACCEPTABLE RANGE: <strong>' + R.formatMoney(minVal) + ' \u2013 ' + R.formatMoney(maxVal) + '</strong><br>' +
         '<span class="text-dim" style="font-size:8px">' +
           industry.minMult + '\u00d7 \u2013 ' + industry.maxMult + '\u00d7 of ' + R.formatMoney(revenue) +

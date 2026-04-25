@@ -147,6 +147,9 @@ window.BitPitch.exercises['ex06'] = function (context) {
     var cls = isOk ? 'feedback-correct' : 'feedback-wrong';
     var msg = isOk ? 'CORRECT!' : 'CHECK BELOW';
 
+    // Exact answer
+    var exactLine = 'EXACT ANSWER: $' + profitPerUnit + ' profit / ' + breakEvenUnits.toLocaleString() + ' units';
+
     // Acceptable ranges (profit ±2%, units ±5% — fixed, no difficulty config)
     var profLo = (profitPerUnit * 0.98).toFixed(1);
     var profHi = (profitPerUnit * 1.02).toFixed(1);
@@ -169,6 +172,7 @@ window.BitPitch.exercises['ex06'] = function (context) {
     context.container.innerHTML +=
       '<div class="feedback-box ' + cls + '">' +
         msg + '<br><br>' +
+        exactLine + '<br>' +
         acceptableLine + '<br>' +
         '<span class="text-dim" style="font-size:8px">' +
           '$' + s.price + ' \u2212 $' + s.cost + ' = $' + profitPerUnit + ' profit &nbsp; ' +
