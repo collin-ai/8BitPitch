@@ -75,6 +75,7 @@ window.BitPitch.exercises['ex02'] = function (context) {
           '<button class="btn btn-primary" id="submit-btn">SUBMIT</button>' +
           '<button class="btn btn-danger" id="pass-btn">PASS</button>' +
           '<button class="btn numpad-toggle-btn" type="button" onclick="BitPitch.Numpad.toggle()" onmousedown="return false">#</button>' +
+          '<button class="btn sound-toggle-btn' + (window.BitPitch.Sound && !window.BitPitch.Sound.isEnabled() ? ' muted' : '') + '" type="button" onclick="BitPitch.Sound.toggle()" onmousedown="return false">SFX</button>' +
         '</div>' +
       '</div>';
 
@@ -140,6 +141,7 @@ window.BitPitch.exercises['ex02'] = function (context) {
   }
 
   function showFeedback(company, industry, revenue, minVal, maxVal, userLow, userHigh, isOk, elapsed, isPassed, rawLow, rawHigh) {
+    if (window.BitPitch.Sound) window.BitPitch.Sound.play(isOk && !isPassed);
     var cls = isOk ? 'feedback-correct' : 'feedback-wrong';
     var msg = isOk ? 'GOOD RANGE!' : 'RANGE OFF';
 

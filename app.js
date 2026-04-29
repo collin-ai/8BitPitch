@@ -17,7 +17,7 @@ function esc(s) {
 // NOTE: 'AppState' is referenced by name in inline onclick attributes in index.html — do not rename without updating HTML.
 // Global application state — one object that holds everything
 var AppState = {
-  mode:            'drill',    // 'drill', 'practice', 'scores', 'settings'
+  mode:            'drill',    // 'drill', 'practice', 'mode-select', 'profile', 'news', 'settings'
   currentExercise: null,       // id string like 'ex01'
   session:         null,       // BitPitch.Session instance
   lastExercise:    null,       // for "Play Again"
@@ -49,10 +49,44 @@ var EXERCISES = [
 
 // Show one screen, hide all others
 function showScreen(name) {
+  var noBarScreens = ['splash', 'login-entry'];
+  document.getElementById('mode-bar').style.display =
+    noBarScreens.indexOf(name) !== -1 ? 'none' : '';
   var screens = document.querySelectorAll('.screen');
   screens.forEach(function (s) { s.classList.add('hidden'); });
   document.getElementById('screen-' + name).classList.remove('hidden');
 }
+
+// ---- Splash animation ----
+
+function runSplash() {
+  var words = ['splash-w1', 'splash-w2', 'splash-w3', 'splash-w4'];
+  var delay = 0;
+  words.forEach(function (id, i) {
+    delay += (i === 0 ? 260 : 455);
+    setTimeout(function () {
+      document.getElementById(id).classList.add('landed');
+    }, delay);
+  });
+  // pause after last word, then fade and advance
+  setTimeout(function () {
+    var splash = document.getElementById('screen-splash');
+    splash.classList.add('fading');
+    setTimeout(function () {
+      splash.classList.add('hidden');
+      showScreen('login-entry');
+    }, 520);
+  }, delay + 1170);
+}
+
+AppState.playAsGuest = function () {
+  AppState.currentUser = null;   // guest — no session
+  renderHome();
+};
+
+AppState.showRegister = function () {
+  // Phase 11-01 will wire this to #screen-register
+};
 
 // ---- Home screen ----
 
@@ -72,14 +106,17 @@ function renderHome() {
   });
   // Sync active tab to current mode (drill or practice only on home grid)
   syncModeTabs();
+  var sublabel = document.getElementById('tab-mode-sublabel');
+  if (sublabel) sublabel.textContent = (AppState.mode === 'practice') ? 'PRACTICE' : 'DRILL';
   showScreen('home');
 }
 
 function syncModeTabs() {
-  var modes = ['drill', 'practice', 'scores', 'settings'];
-  modes.forEach(function (m) {
-    var tab = document.getElementById('tab-' + m);
-    if (tab) tab.classList.toggle('active', m === AppState.mode);
+  var activeId = AppState.mode === 'profile' ? 'tab-profile' :
+                 AppState.mode === 'news'    ? 'tab-news'    : 'tab-mode-select';
+  ['tab-mode-select', 'tab-profile', 'tab-news'].forEach(function (id) {
+    var tab = document.getElementById(id);
+    if (tab) tab.classList.toggle('active', id === activeId);
   });
 }
 
@@ -89,15 +126,21 @@ AppState.setMode = function (mode) {
   AppState.mode = mode;
   if (mode === 'drill' || mode === 'practice') {
     renderHome();
-  } else if (mode === 'scores') {
-    AppState.showHighScores();
+  } else if (mode === 'mode-select') {
+    AppState.showModeSelect();
+  } else if (mode === 'profile') {
+    AppState.showProfile();
+  } else if (mode === 'news') {
+    AppState.showNews();
   } else if (mode === 'settings') {
-    AppState.showDifficultyExplained();
+    AppState.showDifficultyExplained(); // kept for direct nav from Profile & Settings (Phase 12-03)
   }
 };
 
-// Placeholder handlers — wired fully in later phases
-AppState.showHighScores          = function () { syncModeTabs(); showScreen('home'); };
+// Navigation handlers — screen content populated in later phases
+AppState.showModeSelect          = function () { syncModeTabs(); showScreen('mode-select'); };
+AppState.showProfile             = function () { syncModeTabs(); showScreen('profile'); };
+AppState.showNews                = function () { syncModeTabs(); showScreen('news'); };
 AppState.showDifficultyExplained = function () { syncModeTabs(); showScreen('difficulty'); };
 
 // ---- Start an exercise ----
@@ -274,8 +317,9 @@ AppState.showSummary = function () {
 window.BitPitch = window.BitPitch || {};
 window.BitPitch.exercises = window.BitPitch.exercises || {};
 
-// Render the home screen when the page loads
-renderHome();
+// Start with mode bar hidden; splash plays first
+document.getElementById('mode-bar').style.display = 'none';
+runSplash();
 
 // Initialise numpad (sets up MutationObserver and focus tracking)
 if (window.BitPitch.Numpad) window.BitPitch.Numpad.init();

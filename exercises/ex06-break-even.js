@@ -74,6 +74,7 @@ window.BitPitch.exercises['ex06'] = function (context) {
           '<button class="btn btn-primary" id="submit-btn">SUBMIT</button>' +
           '<button class="btn btn-danger" id="pass-btn">PASS</button>' +
           '<button class="btn numpad-toggle-btn" type="button" onclick="BitPitch.Numpad.toggle()" onmousedown="return false">#</button>' +
+          '<button class="btn sound-toggle-btn' + (window.BitPitch.Sound && !window.BitPitch.Sound.isEnabled() ? ' muted' : '') + '" type="button" onclick="BitPitch.Sound.toggle()" onmousedown="return false">SFX</button>' +
         '</div>' +
       '</div>';
 
@@ -144,6 +145,7 @@ window.BitPitch.exercises['ex06'] = function (context) {
   }
 
   function showFeedback(s, profitPerUnit, breakEvenUnits, profitOk, unitsOk, isOk, elapsed, userProfit, userUnits, isPassed, rawProfit, rawUnits) {
+    if (window.BitPitch.Sound) window.BitPitch.Sound.play(isOk && !isPassed);
     var cls = isOk ? 'feedback-correct' : 'feedback-wrong';
     var msg = isOk ? 'CORRECT!' : 'CHECK BELOW';
 

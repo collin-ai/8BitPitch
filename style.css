@@ -118,6 +118,14 @@ html, body {
   opacity: 0.85;
 }
 
+.mode-tab-sub {
+  display: block;
+  font-size: 5px;
+  opacity: 0.8;
+  margin-top: 3px;
+  letter-spacing: 0;
+}
+
 /* ---------- HOME: Exercise grid ---------- */
 .exercise-grid {
   display: grid;
@@ -841,6 +849,26 @@ html, body {
   transform: translate(2px, 2px);
 }
 
+.sound-toggle-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  padding: 12px 16px;
+  background: transparent;
+  color: var(--green);
+  border: 2px solid var(--green);
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.sound-toggle-btn.muted {
+  color: var(--text-dim);
+  border-color: var(--text-dim);
+}
+
+.sound-toggle-btn:active {
+  transform: translate(2px, 2px);
+}
+
 /* Panel — sits below #drill-area inside .drill-body */
 #numpad-panel {
   width: 100%;
@@ -885,6 +913,108 @@ html, body {
    font-size >=16px tells iOS not to zoom the viewport. */
 .numpad-mode .drill-input {
   font-size: 16px !important;
+}
+
+/* ── Dim button variant ── */
+.btn-dim {
+  background: var(--panel);
+  color: var(--text-dim);
+  border-color: var(--text-dim);
+}
+
+.btn-dim:hover { border-color: var(--text); color: var(--text); }
+
+/* ── Splash Screen ── */
+#screen-splash {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+}
+
+.splash-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.splash-word {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 48px;
+  color: var(--yellow);
+  letter-spacing: 4px;
+  opacity: 0;
+  transform: translateY(-60px);
+  transition: opacity 0.33s ease, transform 0.39s ease;
+}
+
+.splash-word.landed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#screen-splash.fading {
+  opacity: 0;
+  transition: opacity 0.52s ease;
+}
+
+/* ── Log-In Entry Screen ── */
+#screen-login-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.login-entry-logo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 28px;
+  color: var(--yellow);
+  letter-spacing: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.login-entry-tagline {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+}
+
+.login-entry-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 280px;
+}
+
+/* ── Contact Creator ── */
+.contact-row {
+  text-align: center;
+  margin-top: 16px;
+  padding-bottom: 12px;
+}
+
+.contact-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  text-decoration: none;
+  border: 1px solid var(--text-dim);
+  padding: 6px 12px;
+}
+
+.contact-btn:hover,
+.contact-btn:active {
+  color: var(--text);
+  border-color: var(--text);
 }
 
 /* ---------- Responsive ---------- */

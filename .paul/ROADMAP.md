@@ -159,18 +159,59 @@ Additional global changes:
 
 ---
 
-## Milestone 5 (Planned): Draft 5 — New Features
+## Milestone 5 (In Progress): Draft 5 — New Features
 
-Status: **PLANNED**
+Status: **IN PROGRESS** (started 2026-04-25)
 
-**Goal:** Add user accounts, score persistence, feedback form, and waitlist — requires web hosting (Vercel)
-**Prerequisite:** Milestone 4 complete (all 09-03 fixes applied)
+**Goal:** Audiovisual feedback, UI structural overhaul, beta user auth, Supabase score persistence, ads system.
+**Prerequisite:** Milestone 4 complete ✓
+**Hosting prerequisite:** Vercel deploy required before Phase 11 (Supabase API calls need HTTPS)
 
-| Phase | Name | Status | Scope |
-|-------|------|--------|-------|
-| 10 | Supabase Score Tracking | Planned | Supabase project setup; write session scores to DB; display on High Scores screen |
-| 11 | User Authentication | Planned | Username + password auth via Supabase Auth; login/register screens; scores linked to user |
-| 12 | Feedback + Waitlist | Planned | Embedded Google Form for feedback; waitlist signup form (email capture) |
+### Phase 10: AV Feedback + UI Overhaul
+
+| Plan | Name | Status | Scope |
+|------|------|--------|-------|
+| 10-01 | Favicon | **DONE** | Inline SVG favicon — yellow 8 on black rounded square |
+| 10-02 | Sound + Vibration System | **DONE** | Web Audio API sounds for correct/wrong; vibration; noise toggle in all 8 exercises |
+| 10-03 | Mode Bar Redesign + News Screen | **DONE** | MODE SELECT tab (shows active mode); PROFILE & SETTINGS (was HIGH SCORES); 8BITPITCH NEWS (rightmost, new screen) |
+| 10-04 | Splash + Log-In Entry Screen | Planned | Drop-in word animation (8 Bit Pitch Lite); fades to log-in entry screen with PLAY AS GUEST + CREATE BETA ACCOUNT |
+| 10-05 | Contact Creator Button | Planned | Button on home screen → Google Form (https://forms.gle/Q1gpSmKsx6o5AGTT8) |
+
+### Phase 11: Auth + Ads + Backend
+
+| Plan | Name | Status | Scope |
+|------|------|--------|-------|
+| 11-01 | Beta Auth Workflow | Planned | Register + Sign-In screens (username ≤10 chars, 6-digit PIN); Supabase Auth wiring; AppState.currentUser; session restore on load |
+| 11-02 | Supabase Score Tracking | Planned | scores table SQL + RLS; utils/supabase.js; saveScore hook in showSummary(); guest scores discarded |
+| 11-03 | Profile & Settings Screen | Planned | Replace HIGH SCORES stub; logged-in user score table; guest sign-in prompt |
+| 11-04 | Ads System | Planned | Exercise counter per mode; ad plays BEFORE score screen (proceedFn pattern) after 8 (drill) / 16 (practice) exercises; fake ad with creator placeholder |
+| 11-05 | Extended Sound System | Planned | 4 new sounds: UI click (all .btn via delegation), splash jingle (4 tones during word drop-in), level-up fanfare, session complete flourish |
+
+### Phase 12: Mode Select Menu + Profile & Settings
+
+| Plan | Name | Status | Scope |
+|------|------|--------|-------|
+| 12-01 | Mode Select Screen | Planned | 3 selectable boxes (Practice/Drill/Coming Soon) with icons + descriptions; completes Mode Select stub from 10-03 |
+| 12-02 | Profile Widget Component | Planned | Reusable 108px widget: left-third 8-bit CSS sprite character + username; right two-thirds swipeable stats (XP total, then level per exercise) |
+| 12-03 | Profile & Settings Full Build | Planned | Top: Profile Widget; below: Leaderboard/Upload (→ Google Form), Difficulty Explained link, High Scores per exercise (sub-view with level + scores) |
+| 12-04 | Exercise Leveling System | Planned | XP = total correct answers; level per exercise derived from correct count (Easy exercises: 25 correct = Level 1; Harder 3-question exercises: 15 correct = Level 1); localStorage for guest, Supabase for logged-in |
+| 12-05 | Local Leaderboard & Upload | Planned | bp_local_sessions (max 40); session count + slot counter screen; UPLOAD SCORES → ad gate → sessions cleared + rendered in profile; bp_uploaded_sessions persists history |
+| 12-06 | Settings Screen | Planned | Account (sign in/out/register), Audio & Input (sound/vibration/numpad default), Gameplay (default difficulty), Data (clear local), About; SETTINGS button in profile below widget |
+
+### Phase 13: Teaser Screen + Profile Widget in Menu + News Content
+
+| Plan | Name | Status | Scope |
+|------|------|--------|-------|
+| 13-01 | Teaser Screen | Planned | Between splash and log-in: Value Equity Ask question; click-and-hold correct answer 3 seconds → correct sound → advance; acts as anti-bot |
+| 13-02 | Profile Widget in Main Menu | Planned | Mini profile widget above drill grid on home screen; reuses widget from 12-02; long-press → Profile & Settings |
+| 13-03 | 8BitPitch News Content | Planned | Populate news screen with Coming Soon items: Battle Pass, daily news, live/team battles, badges, Gauntlet Mode, Founder profile, Google Form hooks — **BLOCKING GATE: Google Form CTA trigger condition ("After hitting...") must be confirmed before apply** |
+| 13-04 | → MOVED | — | Moved to 12-06 (Settings Screen) |
+
+### Phase 14: Feedback + Waitlist
+
+| Plan | Name | Status | Scope |
+|------|------|--------|-------|
+| 14 | Feedback + Waitlist | Planned | Embedded Google Form for feedback; waitlist signup form (email capture) |
 
 ---
 
@@ -183,9 +224,9 @@ Status: **PLANNED**
 
 | Phase | Name | Status | Scope |
 |-------|------|--------|-------|
-| 13 | Code Cleanup | Planned | Deferred refactors (R-1, R-3, R-4, R-5), timerEl consistency, stale interval cleanup |
-| 14 | Final Code Review | Planned | Adversarial review post-features; cross-browser check (Firefox, Safari) |
-| 15 | Deploy | Planned | Push to GitHub; configure Vercel; verify live at production URL |
+| 15 | Code Cleanup | Planned | Deferred refactors (R-1, R-3, R-4, R-5), timerEl consistency, stale interval cleanup |
+| 16 | Final Code Review | Planned | Adversarial review post-features; cross-browser check (Firefox, Safari) |
+| 17 | Deploy | Planned | Push to GitHub; configure Vercel; verify live at production URL |
 
 ---
 

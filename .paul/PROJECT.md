@@ -93,9 +93,34 @@ Aspiring investors and entrepreneurs can sharpen their deal-math intuition throu
 - [x] E-3: parseUserNumber accepts scientific notation / negative values — add isFinite/negative guard
 - [x] Testing: create tests/tests.html covering pure utility functions (T-1, T-2, T-3)
 
-### Draft 5 — Milestone 5 (Planned)
-- [ ] Supabase integration — write session scores to database; display on High Scores screen
-- [ ] User authentication — username + password login/register via Supabase Auth; scores linked to user
+### Draft 5 — Milestone 5 (In Progress)
+
+**Phase 10: AV Feedback + UI Overhaul**
+- [x] Favicon: inline SVG — yellow 8 on black rounded square (Plan 10-01)
+- [x] Sound + vibration: cash register (correct), buzzer (wrong), vibration both; noise toggle (Plan 10-02)
+- [x] Mode bar: MODE SELECT tab with active mode label; PROFILE & SETTINGS; 8BITPITCH NEWS rightmost (Plan 10-03)
+- [ ] Splash screen: "8 Bit Pitch Lite" words drop in from above sequentially, then fade to log-in entry (Plan 10-04)
+- [ ] Log-in entry screen: PLAY AS GUEST (goes to home) + CREATE BETA ACCOUNT (Phase 11) (Plan 10-04)
+- [ ] Contact Creator button on home screen → Google Form (Plan 10-05)
+
+**Phase 11: Auth + Ads + Backend**
+- [ ] Beta auth: username (≤10 chars) + 6-digit PIN; beta notice; password recovery → email founder (Plan 11-01)
+- [ ] Supabase score storage: all drill attempts saved for logged-in users; guest scores discarded (Plan 11-02)
+- [ ] Profile & Settings screen: user's score history; guest sign-in prompt (Plan 11-03)
+- [ ] Ads: after 8 drill exercises or 16 practice exercises; fake ad with creator placeholder (Plan 11-04)
+
+**Phase 12: Mode Select Menu + Profile & Settings**
+- [ ] Mode Select screen: 3 boxes (Practice — XP not counted; Drill — XP counted; Coming Soon → News) with icons + descriptions (Plan 12-01)
+- [ ] Profile Widget: 108px full-width; left-third: 8-bit CSS character + username; right two-thirds: swipeable stats (XP total, level per exercise) (Plan 12-02)
+- [ ] Profile & Settings full screen: widget at top; Leaderboard/Upload (→ Google Form); Difficulty Explained; High Scores per exercise with level sub-view (Plan 12-03)
+- [ ] Exercise leveling: XP = total correct; Level 1 = 25 correct (5-question exercises) or 15 correct (3-question exercises); localStorage (guest) / Supabase (logged-in) (Plan 12-04)
+
+**Phase 13: Teaser Screen + Profile Widget in Menu + News**
+- [ ] Teaser screen (between splash and log-in): Value Equity Ask question; click-and-hold correct answer 3s → sound → advance; anti-bot (Plan 13-01)
+- [ ] Profile Widget in main menu: mini widget above drill grid; long-press → Profile & Settings (Plan 13-02)
+- [ ] 8BitPitch News content: Battle Pass, daily news, live/team battles, badges, Gauntlet Mode, Founder profile, Google Form hooks TBD (Plan 13-03)
+
+**Phase 14: Feedback + Waitlist**
 - [ ] Google Form — embedded feedback form on a new Feedback tab or modal
 - [ ] Waitlist — email capture form for interested users
 

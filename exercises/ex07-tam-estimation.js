@@ -56,6 +56,7 @@ window.BitPitch.exercises['ex07'] = function (context) {
           '<button class="btn btn-primary" id="submit-btn">CALCULATE MY TAM</button>' +
           '<button class="btn btn-danger" id="pass-btn">PASS</button>' +
           '<button class="btn numpad-toggle-btn" type="button" onclick="BitPitch.Numpad.toggle()" onmousedown="return false">#</button>' +
+          '<button class="btn sound-toggle-btn' + (window.BitPitch.Sound && !window.BitPitch.Sound.isEnabled() ? ' muted' : '') + '" type="button" onclick="BitPitch.Sound.toggle()" onmousedown="return false">SFX</button>' +
         '</div>' +
       '</div>';
 
@@ -113,6 +114,7 @@ window.BitPitch.exercises['ex07'] = function (context) {
       spendInput.value = 'PASS';
       custInput.classList.add('input-submitted');
       spendInput.classList.add('input-submitted');
+      if (window.BitPitch.Sound) window.BitPitch.Sound.play(false);
       context.onComplete({ exerciseId: 'ex07', question: cat.label, correct: false, timeMs: elapsed, selfGraded: true });
       showSelfGrade(cat, 0, 0, 0, elapsed, true);
     };
@@ -161,6 +163,7 @@ window.BitPitch.exercises['ex07'] = function (context) {
     function grade(correct) {
       document.getElementById('thumb-up').disabled   = true;
       document.getElementById('thumb-down').disabled = true;
+      if (window.BitPitch.Sound) window.BitPitch.Sound.play(correct);
       context.onComplete({
         exerciseId: 'ex07',
         question:   cat.label,

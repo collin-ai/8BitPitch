@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="data:,">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='black'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-size='22' font-weight='bold' fill='%23FFD700'>8</text></svg>">
   <meta name="description" content="8BitPitch Lite — sharpen your startup finance mental math with 8 retro-style drills.">
   <meta property="og:title" content="8BitPitch Lite">
   <meta property="og:description" content="8 mental math drills for investors and entrepreneurs. Valuation, break-even, TAM, growth rates — in an 8-bit retro game.">
@@ -16,18 +16,40 @@
 </head>
 <body>
 
+  <!-- ===================== SPLASH SCREEN ===================== -->
+  <div id="screen-splash" class="screen">
+    <div class="splash-stage" id="splash-stage">
+      <div class="splash-word" id="splash-w1">8</div>
+      <div class="splash-word" id="splash-w2">BIT</div>
+      <div class="splash-word" id="splash-w3">PITCH</div>
+      <div class="splash-word" id="splash-w4">LITE</div>
+    </div>
+  </div>
+
+  <!-- ===================== LOG-IN ENTRY SCREEN ===================== -->
+  <div id="screen-login-entry" class="screen hidden">
+    <div class="login-entry-logo">
+      <div>8BITPITCH</div>
+      <div>LITE</div>
+    </div>
+    <div class="login-entry-tagline">MENTAL MATH FOR FOUNDERS</div>
+    <div class="login-entry-buttons">
+      <button class="btn btn-primary" onclick="AppState.playAsGuest()">PLAY AS GUEST</button>
+      <button class="btn btn-dim" onclick="AppState.showRegister()">CREATE BETA ACCOUNT</button>
+    </div>
+  </div>
+
   <!-- ===================== HOME SCREEN ===================== -->
-  <div id="screen-home" class="screen">
+  <div id="screen-home" class="screen hidden">
     <header class="header">
       <h1 class="title">8BIT<span class="title-accent">PITCH</span> LITE</h1>
       <p class="subtitle">Valuation Mental Math Trainer</p>
     </header>
 
     <div class="mode-bar" id="mode-bar">
-      <button class="mode-tab active" id="tab-drill"     onclick="AppState.setMode('drill')">DRILL<br>MODE</button>
-      <button class="mode-tab"        id="tab-practice"  onclick="AppState.setMode('practice')">PRACTICE<br>MODE</button>
-      <button class="mode-tab"        id="tab-scores"    onclick="AppState.setMode('scores')">HIGH<br>SCORES</button>
-      <button class="mode-tab"        id="tab-settings"  onclick="AppState.setMode('settings')">DIFFICULTY<br>EXPLAINED</button>
+      <button class="mode-tab active" id="tab-mode-select" onclick="AppState.setMode('mode-select')">MODE<br>SELECT<br><span id="tab-mode-sublabel" class="mode-tab-sub">DRILL</span></button>
+      <button class="mode-tab"        id="tab-profile"    onclick="AppState.setMode('profile')">PROFILE &amp;<br>SETTINGS</button>
+      <button class="mode-tab"        id="tab-news"       onclick="AppState.setMode('news')">8BITPITCH<br>NEWS</button>
     </div>
 
     <div class="exercise-grid" id="exercise-grid">
@@ -36,6 +58,13 @@
 
     <div class="home-footer">
       <p>SELECT AN EXERCISE TO BEGIN</p>
+    </div>
+
+    <div class="contact-row">
+      <a class="contact-btn"
+         href="https://forms.gle/Q1gpSmKsx6o5AGTT8"
+         target="_blank"
+         rel="noopener noreferrer">CONTACT CREATOR</a>
     </div>
   </div>
 
@@ -168,12 +197,34 @@
     </div>
   </div>
 
+  <!-- ===================== MODE SELECT SCREEN ===================== -->
+  <div id="screen-mode-select" class="screen hidden">
+    <!-- Populated by Phase 12-01 -->
+  </div>
+
+  <!-- ===================== PROFILE & SETTINGS SCREEN ===================== -->
+  <div id="screen-profile" class="screen hidden">
+    <!-- Populated by Phase 11-03 and 12-03 -->
+  </div>
+
+  <!-- ===================== 8BITPITCH NEWS SCREEN ===================== -->
+  <div id="screen-news" class="screen hidden">
+    <div class="diff-exp-header">
+      <button class="back-btn" onclick="AppState.goHome()">MENU</button>
+      <span class="diff-exp-title">8BITPITCH NEWS</span>
+    </div>
+    <div class="diff-exp-body">
+      <p class="diff-exp-intro">COMING SOON — CHECK BACK AFTER THE NEXT UPDATE.</p>
+    </div>
+  </div>
+
   <!-- ===================== SCRIPTS ===================== -->
   <!-- Load order matters: utils first, then exercises, then app last -->
   <script src="utils/random.js"></script>
   <script src="utils/timer.js"></script>
   <script src="utils/scoring.js"></script>
   <script src="utils/numpad.js"></script>
+  <script src="utils/sounds.js"></script>
   <script src="exercises/ex01-percentage-snap.js"></script>
   <script src="exercises/ex02-multiples.js"></script>
   <script src="exercises/ex03-double-triple-halve.js"></script>

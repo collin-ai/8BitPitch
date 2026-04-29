@@ -2,10 +2,11 @@
 
 ## Current Position
 
-Milestone: Inter-milestone polish (pre-Milestone 5)
-Phase: Ad-hoc — Difficulty Explained page legibility overhaul — **COMPLETE**
-Status: PLAN ✓ — APPLY ✓ — UNIFY ✓
-Last activity: 2026-04-25 — Difficulty Explained page redesigned: toggle table, font/colour fixes, mobile fit
+Milestone: Milestone 5 — Draft 5: New Features
+Phase: 10 of 17 (AV Feedback + UI Overhaul) — In Progress
+Plan: 11-01 (Beta Auth Workflow) — blocked on pre-flight (see Handoff)
+Status: Phase 10 complete; Phase 11 blocked on Vercel + Supabase pre-flight
+Last activity: 2026-04-28 — Phases 10-04 and 10-05 applied and unified; ad-hoc splash timing +30% and login-entry logo split to two lines
 
 ## Loop Position
 
@@ -20,6 +21,26 @@ PLAN ──▶ APPLY ──▶ UNIFY
   ✓        ✓        ✓     [Phase 09-05 — numpad polish + ex05 restructure — complete]
   ✓        ✓        ✓     [Phase 09-06 — scoring overhaul + EXACT ANSWER + ex03 restructure — complete]
   ✓        ✓        ✓     [Ad-hoc — Difficulty Explained page legibility overhaul — complete]
+  ✓        ✓        ✓     [Phase 10-01 — Favicon — complete]
+  ✓        ✓        ✓     [Phase 10-02 — Sound + Vibration System — complete]
+  ✓        ✓        ✓     [Phase 10-03 — Mode Bar Redesign + News Screen — complete]
+  ✓        ✓        ✓     [Milestone 5 full planning — all PLAN.md files written (10-04 through 13-04)]
+  ✓        ✓        ✓     [Phase 10-04 — Splash + Log-In Entry Screen — complete]
+  ✓        ✓        ✓     [Phase 10-05 — Contact Creator Button — complete]
+  ✓        ○        ○     [Phase 11-01 — Beta Auth Workflow]
+  ✓        ○        ○     [Phase 11-02 — Supabase Score Tracking]
+  ✓        ○        ○     [Phase 11-03 — Profile & Settings Screen]
+  ✓        ○        ○     [Phase 11-04 — Ads System]
+  ✓        ○        ○     [Phase 11-05 — Extended Sound System]
+  ✓        ○        ○     [Phase 12-01 — Mode Select Screen]
+  ✓        ○        ○     [Phase 12-02 — Profile Widget Component]
+  ✓        ○        ○     [Phase 12-03 — Profile & Settings Full Build]
+  ✓        ○        ○     [Phase 12-04 — Exercise Leveling System]
+  ✓        ○        ○     [Phase 12-05 — Local Leaderboard & Upload]
+  ✓        ○        ○     [Phase 12-06 — Settings Screen]
+  ✓        ○        ○     [Phase 13-01 — Teaser Screen]
+  ✓        ○        ○     [Phase 13-02 — Profile Widget in Main Menu]
+  ✓        ○        ○     [Phase 13-03 — 8BitPitch News Content]
 ```
 
 ## Key Decisions
@@ -110,27 +131,66 @@ PLAN ──▶ APPLY ──▶ UNIFY
 | 09-05 | Numpad Polish + ex05 Restructure | DONE |
 | 09-06 | Scoring Overhaul + EXACT ANSWER + ex03 Restructure | DONE |
 
+## Phase 10 Plan Progress
+
+| Plan | Name | Status |
+|------|------|--------|
+| 10-01 | Favicon | DONE |
+| 10-02 | Sound + Vibration System | DONE |
+| 10-03 | Mode Bar Redesign + News Screen | DONE |
+| 10-04 | Splash + Log-In Entry Screen | DONE |
+| 10-05 | Contact Creator Button | DONE |
+
+## Phase 11 Plan Progress
+
+| Plan | Name | Status |
+|------|------|--------|
+| 11-01 | Beta Auth Workflow | PLANNED |
+| 11-02 | Supabase Score Tracking | PLANNED |
+| 11-03 | Profile & Settings Screen | PLANNED |
+| 11-04 | Ads System (pre-score interstitial) | PLANNED |
+| 11-05 | Extended Sound System | PLANNED |
+
+## Phase 12 Plan Progress
+
+| Plan | Name | Status |
+|------|------|--------|
+| 12-01 | Mode Select Screen | PLANNED |
+| 12-02 | Profile Widget Component | PLANNED |
+| 12-03 | Profile & Settings Full Build | PLANNED |
+| 12-04 | Exercise Leveling System | PLANNED |
+| 12-05 | Local Leaderboard & Upload | PLANNED |
+| 12-06 | Settings Screen | PLANNED |
+
+## Phase 13 Plan Progress
+
+| Plan | Name | Status |
+|------|------|--------|
+| 13-01 | Teaser Screen | PLANNED |
+| 13-02 | Profile Widget in Main Menu | PLANNED |
+| 13-03 | 8BitPitch News Content | PLANNED |
+| 13-04 | → MOVED to 12-06 | — |
+
 ## Session Continuity
 
-Last session: 2026-04-25
-Stopped at: Ad-hoc Difficulty Explained overhaul complete — pushed to GitHub
-Next action: Begin Milestone 5 — Phase 10 (Supabase Score Tracking)
-Resume file: `.paul/HANDOFF-2026-04-25b.md`
+Last session: 2026-04-27
+Stopped at: Phase 10 fully complete; paused before Phase 11
+Next action: Apply Phase 11-01 (Beta Auth Workflow) — requires Vercel + Supabase pre-flight first
+Resume file: `.paul/HANDOFF-2026-04-27.md`
 Resume context:
-- EASY tolerance changed from ±25% to ±10% across all exercises; `general` field added to DIFFICULTY_CONFIG
-- EXACT ANSWER line added above ACCEPTABLE in all feedback boxes (all exercises except ex07)
-- ex03 flattened to 5 independent questions; fresh base number + random op each time; progress Q X / 5
-- ex03 Your Answer now shows raw input string (not formatted)
-- Difficulty Explained page fully redesigned (see ad-hoc session notes)
-- Git remote: https://github.com/collin-ai/8BitPitch.git
-- Milestone 5 planned: Supabase scores, username/password auth, Google Form feedback, waitlist
-- Deferred items (C-5, R-1, R-3, R-4, R-5, E-2, W-4, T-4) remain for Milestone 6
+- All Milestone 5 plans written (10-04 through 13-03); loop position is PLAN ✓ for all
+- 11-04 amended: ad plays before score screen (not before home screen); uses proceedFn callback pattern
+- 12-05 added: Local Leaderboard & Upload (40-session cap, ad-gated upload, bp_local_sessions)
+- 11-05 added: Extended sounds (click, splash jingle, level-up fanfare, session complete flourish)
+- 12-06 added (was 13-04): Settings screen (account, audio/input, gameplay, data, about)
+- 13-03 has a BLOCKING gate: Google Form CTA trigger condition ("After hitting...") must be confirmed before that plan can be applied
+- Pre-apply prerequisites for Phase 11+: Vercel deploy live + Supabase anon key retrieved + email confirmation disabled
 
 ## How to Resume (fresh context)
 
-1. Read `.paul/HANDOFF-2026-04-25.md` for full session context
+1. Read `.paul/HANDOFF-2026-04-27.md` for full session context
 2. Read this STATE.md for decisions and plan history
-3. Confirm Supabase account status with user, then run `/paul:plan` for Phase 10
+3. Apply Phase 10-04 (Splash + Log-In Entry Screen)
 
 ## Tooling Setup
 
@@ -149,4 +209,4 @@ Resume context:
 - Pitch Simulator — removed from Milestone 5 scope; indefinitely deferred
 
 ---
-*Updated: 2026-04-22 — Phase 09-03 complete; Milestone 4 closed; Milestones 5 & 6 planned*
+*Updated: 2026-04-25 — Phases 10-01/02/03 complete; 10-04 next*

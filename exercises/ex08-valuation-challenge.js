@@ -96,6 +96,7 @@ window.BitPitch.exercises['ex08'] = function (context) {
             '<button class="btn btn-primary" id="submit-all-btn">SUBMIT ALL</button>' +
             '<button class="btn btn-danger"  id="giveup-btn">GIVE UP</button>' +
             '<button class="btn numpad-toggle-btn" type="button" onclick="BitPitch.Numpad.toggle()" onmousedown="return false">#</button>' +
+            '<button class="btn sound-toggle-btn' + (window.BitPitch.Sound && !window.BitPitch.Sound.isEnabled() ? ' muted' : '') + '" type="button" onclick="BitPitch.Sound.toggle()" onmousedown="return false">SFX</button>' +
           '</div>' +
         '</div>' +
       '</div>';
@@ -172,6 +173,7 @@ window.BitPitch.exercises['ex08'] = function (context) {
 
   function showFeedback(pitch, q1Ok, q2Ok, q3Ok, elapsed, gaveUp, rawVal, rawMult, rawBE) {
     var overallOk = !gaveUp && q1Ok && q2Ok && q3Ok;
+    if (window.BitPitch.Sound) window.BitPitch.Sound.play(overallOk);
     var cls = overallOk ? 'feedback-correct' : 'feedback-wrong';
     var msg = overallOk ? 'SHARP INVESTOR!' : (gaveUp ? 'GAVE UP' : 'KEEP TRAINING');
 
